@@ -1,0 +1,9 @@
+﻿nhe47_md_core_done = { icon = "domicile_upgrade" title = nhe47_md_core_notice_title desc = event_message_effect style = neutral message_filter_type = event_outcome }
+
+nhe47_md_core_failed = { icon = "domicile_upgrade" title = nhe47_md_core_notice_title desc = event_message_effect style = neutral message_filter_type = event_outcome }
+
+nhe47_md_core_refused = { icon = "domicile_upgrade" title = nhe47_md_core_notice_title desc = event_message_effect style = neutral message_filter_type = event_outcome }
+
+nhe47_md_building_adjusted = { icon = "domicile_upgrade" title = nhe47_md_building_adjusted_title desc = event_message_effect style = neutral message_filter_type = event_outcome }
+
+nhe47_md_core_attachments_refused = { icon = "domicile_upgrade" title = nhe47_md_core_notice_title desc = event_message_effect style = neutral message_filter_type = event_outcome }

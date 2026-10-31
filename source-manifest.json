@@ -1,0 +1,285 @@
+{
+  "snapshot": "R72+R76-20261031",
+  "files": [
+    {
+      "path": "pgh_accounts/common/customizable_localization/nhe19_labels.txt",
+      "sha256": "2904471a76be4b64c791d8afe956ce8f2840dab921ffe2d7aa66fe6d40450634"
+    },
+    {
+      "path": "pgh_accounts/common/decisions/nhe19_decisions.txt",
+      "sha256": "1c822981d49949165002e2600fa607679a5764fb529946f4b3c16faeaea68fc9"
+    },
+    {
+      "path": "pgh_accounts/common/decisions/nhe47_md_decisions.txt",
+      "sha256": "bc86812441ee5aa4485f0d4d920ff66a3353c5f804a540f8c5bff71f90eff7ae"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/00_camp_buildings.txt",
+      "sha256": "84486e93bf08a87d046dc6f9fa5702afa035991ebd65624d2d6041fb3c83dac4"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/00_chinese_estate_buildings.txt",
+      "sha256": "6cceb6dbc77f17a1816c0b08786e4da55a67fe597393edffbf2116c21cdec3df"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/00_estate_buildings.txt",
+      "sha256": "09902a9b78926bd7f42df459349fd56ac7a5a365c2e17025d23833cb6810377d"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/00_yurt_buildings.txt",
+      "sha256": "fb336973a645552d2d9771884b4b51ec1b818b957baa09c946f07b62173c1145"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/10_japanese_manor_buildings.txt",
+      "sha256": "d30c936cd8927784c4f7fc8856537cf02831a56dfefc13015f57147749819bfd"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/buildings/11_ecclesiastical_domicile_buildings.txt",
+      "sha256": "a5a7d6e45f75e772e50f0b95c51e4d754dc55a51cf1149fcf06749d871759d49"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/types/zz_nhe19_estate.txt",
+      "sha256": "65ea630f72c6d6e037ec5a4a5580cdb5a469074be1fded0f8f5844f0b284600d"
+    },
+    {
+      "path": "pgh_accounts/common/domiciles/types/zz_nhe72_palace_estate.txt",
+      "sha256": "805361273c742213ca5748013588772b7c5fc56e54fc3618b4c06cf2bf11d8cf"
+    },
+    {
+      "path": "pgh_accounts/common/governments/zz_nhe19_steppe.txt",
+      "sha256": "c12e393a4526fec2d8c6ead68b6d0de504c7de1635f2bb6249f6185b1f6109da"
+    },
+    {
+      "path": "pgh_accounts/common/messages/nhe45_messages.txt",
+      "sha256": "e7a3532eeb97c165cd0313f53facccee5dd7a73dcf08e1ab5ec3314a8800c2d7"
+    },
+    {
+      "path": "pgh_accounts/common/messages/nhe47_md_resource_messages.txt",
+      "sha256": "71bcdd6ae46d6a673b048bae0f99c408fa9f2dda4aad230b084e091af16e88bd"
+    },
+    {
+      "path": "pgh_accounts/common/on_action/nhe19_on_actions.txt",
+      "sha256": "b5b452734562a8fd38411380580f09672c3f9fd34c83ede85b33d2a647820aa1"
+    },
+    {
+      "path": "pgh_accounts/common/on_action/nhe44_contract_defaults.txt",
+      "sha256": "a211dfc704b0e2e8f732cd6e5631281f2ff3a4cd7032bff50d3134c0ec49f752"
+    },
+    {
+      "path": "pgh_accounts/common/script_values/nhe19_values.txt",
+      "sha256": "4fc2ff888c6c21dcae2f77816ca8aab99532f38e9fa119dbffe52995af8980e4"
+    },
+    {
+      "path": "pgh_accounts/common/script_values/nhe47_md_values.txt",
+      "sha256": "3a03becf4bb57052ff93ce957051d00239cc33ac73b17f6d28f73d71be8d459e"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe19_lifecycle.txt",
+      "sha256": "dbd6a9c6911f4bfa86e5d2d52298b08539b0eb8a45d05ef70cc3bacc6a8d0f13"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe19_migration.txt",
+      "sha256": "089ae217f74d7a7fa8ed113145ad2461c268de35107c933ba6f736c85b038dfd"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe19_native_merge.txt",
+      "sha256": "be8c594dad85cf99333cc0f5a9b07e210198a5f3550213ca9835dd0489337efb"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe19_redemption.txt",
+      "sha256": "776925cd3d7957ed1d52620ab8036b32bf2a5f9c90c3d0306a1afd00c6e6f02a"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe19_view.txt",
+      "sha256": "6dbe63ed5d1580494f64d2fed7d4197f6f1710f88147b0cb5b651b434335a20f"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe44_contract_default_effects.txt",
+      "sha256": "ff32db8b759fc874962afeb01125d7605a4bd4f694f01e4ce5d8cc7eb84cd480"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe45_automatic.txt",
+      "sha256": "71bddd9dba021fdb8ee16624716b0a097bc3d933826594515fe4f36f89ed66a1"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe45_buildings.txt",
+      "sha256": "07fa831e2b634f73bd32f671857551b8e93b40277448851346649f19f4d2214c"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe45_maa_fallback.txt",
+      "sha256": "e1750c98aa701ce584fd8218c0674e853c69f6f661f6c3537d94a655c1a95c99"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe45_resources.txt",
+      "sha256": "483aeefe1d021e6b5d364b04d6e1e532936bc140284bbe4c9a99ba17e18b412b"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe46_presence.txt",
+      "sha256": "eb3bbc1b42560c43a0b84eca8539f70a60bd413addf22a4432f58f64cfc0116d"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe47_md_context_effects.txt",
+      "sha256": "d5b204595f3c48fadfb21f8e7e71eb2207b178deab76ae6b45aabfa136eae425"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe47_md_core_effects.txt",
+      "sha256": "6686dc0a03f9b79552610f7bd0db541cdfe9ff5994cd2edd07d6a918c73d45b4"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe47_md_extra_swap_effects.txt",
+      "sha256": "51969b28ddb124c8c69dfb78504e3e636ad3266c274d71089e34ce914ea80c8c"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe47_md_named_building_effects.txt",
+      "sha256": "d23e865c350dec79bdf1e0d9bfa844aa5b722a665b7a6c01dedfc2b816a79048"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/nhe47_md_swap_building_effects.txt",
+      "sha256": "abec093b7733ece9e8d429c46f8635080377925fc459e76ed66667fcc5497e49"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_effects/zz_nhe72_estate_setup.txt",
+      "sha256": "dad80abe724769b52272a75add9a86aaa6bf9d845574852c047b02fbb95d9c95"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_guis/nhe19_gui.txt",
+      "sha256": "679fa5d8982718e7ce7e8e963a28d9fd22afa84cab71e995fa2ef22394cb0c52"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_guis/nhe47_md_guis.txt",
+      "sha256": "5ca7d58366995fc45f1e097b7d955b1542b98db29b544bd978c335e50a083d7f"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe19_triggers.txt",
+      "sha256": "4f410016958bed969804627851ba0785db58552323090ebcac533e45a876cf82"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe42_contract_triggers.txt",
+      "sha256": "c89516b66f14fb0a6f524c7a85365a5de30487b0dbb836d77dcef2bc347eb35d"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe44_contract_defaults.txt",
+      "sha256": "0ab3796208161a26cda9cea5de5ededa71c9c811409bb5bb15a0d74774bd7a4e"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe45_triggers.txt",
+      "sha256": "da9ce9a01c3110c3ff94e9ca0b54ce5978e29ae2d4ad3e8a802aed51f9a0c2d8"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_core_triggers.txt",
+      "sha256": "e9b8724817808b7b7a1e63c6db5cc55e02c558fc2b8ae10d95455603f8893b35"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_extra_swap_triggers.txt",
+      "sha256": "3bb37779bdf1e91895f28bd94bc031bee349e32e0906aa64436bb08b4794d58d"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_owner_rebuild_triggers.txt",
+      "sha256": "9fd5c695a98113d6788f288c00e88b2da1ee53db08557f13addc58b24fe4f335"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_rebuild_requirements.txt",
+      "sha256": "85de9a90eee0d4f030e6d9ff314b594d1ed629a231ec2a379b96a2fdeec8ecf5"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_swap_triggers.txt",
+      "sha256": "fca7759f78ce5981dc55739a9514441ed2c8144a1e116935b4028cfd59f4b5f5"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/nhe47_md_triggers.txt",
+      "sha256": "d6fe3f89f1d5218587816f252ed15c54ca21b91715f9885014168570dafdc029"
+    },
+    {
+      "path": "pgh_accounts/common/scripted_triggers/zz_nhe72_estate_types.txt",
+      "sha256": "d64f54e3ed6971f62e21541f7eecea2a79afd367dbc56d0b82ae16cbada3830a"
+    },
+    {
+      "path": "pgh_accounts/common/subject_contracts/contracts/nhe42_native_herd.txt",
+      "sha256": "bd471577af4e015b1d6b5e7520899ecdfe8062895ae24e0a6263032b8823d801"
+    },
+    {
+      "path": "pgh_accounts/common/subject_contracts/groups/subject_contract_groups.txt",
+      "sha256": "11c3de46b5db6c6762de6e797081651b9906f918845d2f1fa021dc7e66fb6743"
+    },
+    {
+      "path": "pgh_accounts/data_binding/mpo_macros.txt",
+      "sha256": "c66c3c0e340b7ddcefc4e34d9737b862b93eb75dec9031f782464f66330b7b7b"
+    },
+    {
+      "path": "pgh_accounts/descriptor.mod",
+      "sha256": "a9e6203d475ff2c983515666adb4b45d0ff87ccabc6872602c6269fccda008d5"
+    },
+    {
+      "path": "pgh_accounts/events/nhe47_md_swap_events.txt",
+      "sha256": "65a327f354597a061d63f284c590abd5d9b0a09ee2c7b2506e9628f1179437c8"
+    },
+    {
+      "path": "pgh_accounts/gui/nhe19_office.gui",
+      "sha256": "4d20cc32afdcdc5cc894ac041a28f424f99d522df2a81c494c9e443b1381902a"
+    },
+    {
+      "path": "pgh_accounts/gui/nhe47_md_manager.gui",
+      "sha256": "3b94b03a4a4c6876639363f9f5fc1e73e827681bca1cc7086dadfbd1d34bf3d5"
+    },
+    {
+      "path": "pgh_accounts/gui/scripted_widgets/nhe47_md_widgets.txt",
+      "sha256": "262b269bf41a895178dea3df6829d2262b12c83e1779d6343d66bb625b8b1783"
+    },
+    {
+      "path": "pgh_accounts/gui/window_menatarms_type_view.gui",
+      "sha256": "2f7e0aec1a9801338668f0fe9fafda70b628a05172b3fbc4ce771fa778a8c392"
+    },
+    {
+      "path": "pgh_accounts/gui/window_military.gui",
+      "sha256": "ff5d0a170487369b12a386704e704aac22e73fe90ea3ce054e6d504458bf7d3b"
+    },
+    {
+      "path": "pgh_accounts/gui/window_title.gui",
+      "sha256": "e2df0f9bacc358fd330c209533fe3a8aa78b6524824b9bd26ed21367905202c2"
+    },
+    {
+      "path": "pgh_accounts/localization/english/nhe19_l_english.yml",
+      "sha256": "63f2249c373144cc8b9ef7e446df018066fa0ab3c0f863c3e2d156aac4871f80"
+    },
+    {
+      "path": "pgh_accounts/localization/english/nhe45_l_english.yml",
+      "sha256": "5963dfa605765c1dc37ca3c6626cc326b4ad7e11fe37af51930c7a39aa31a724"
+    },
+    {
+      "path": "pgh_accounts/localization/english/nhe47_md_l_english.yml",
+      "sha256": "7dee6a01d0e1e2fef969291b502e3432c63c93c31b080201101d6af7ccc65a04"
+    },
+    {
+      "path": "pgh_accounts/localization/english/nhe64_list_price_l_english.yml",
+      "sha256": "fc498985c6299a548d2ddb0e4775cd66586cd71b37a0064093406be2faf00596"
+    },
+    {
+      "path": "pgh_accounts/localization/english/nhe72_palace_estate_l_english.yml",
+      "sha256": "dfe8d068d3326590a2654e09bc95f63782bbfb911052a1aac02fcc76ff20716a"
+    },
+    {
+      "path": "pgh_accounts/localization/simp_chinese/nhe19_l_simp_chinese.yml",
+      "sha256": "bfe35c489ddced9c83f7e9e5d2b42f50d3b98e967b5c6a7bf1569ca577ef84af"
+    },
+    {
+      "path": "pgh_accounts/localization/simp_chinese/nhe45_l_simp_chinese.yml",
+      "sha256": "4d6bed16337082d12c32d1652a3d34dc2adb79109568eb4152d779ec9076f70a"
+    },
+    {
+      "path": "pgh_accounts/localization/simp_chinese/nhe47_md_l_simp_chinese.yml",
+      "sha256": "5e01d96af2e58ec1f8e001decdcaea5245687f76fba1535da730d10a56c82fb1"
+    },
+    {
+      "path": "pgh_accounts/localization/simp_chinese/nhe64_list_price_l_simp_chinese.yml",
+      "sha256": "414d6d05991c2006ef7a01c4ad3b1f0416e4d573992161ebba8fd42a5a18fe59"
+    },
+    {
+      "path": "pgh_accounts/localization/simp_chinese/nhe72_palace_estate_l_simp_chinese.yml",
+      "sha256": "4d1a10440dc916ae139a10df6113560dc83ba554d15420b0728a18b9343bad24"
+    },
+    {
+      "path": "pgh_accounts.mod",
+      "sha256": "7c29096f63c71cee05c97968522a503c5fcdd784e39171ec9de53a7f948cbdf5"
+    }
+  ]
+}

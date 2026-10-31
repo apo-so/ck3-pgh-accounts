@@ -1,0 +1,114 @@
+﻿# Native popup frame/header; project-verified T/D contexts retained.
+window = {
+    name = "nhe47_md_manager_window"
+    widgetid = "nhe47_md_manager_window"
+    layer = middle
+    parentanchor = center
+    size = { 900 0 }
+    minimumsize = { 900 0 }
+    movable = yes
+    using = Window_Background_Popup
+    using = Window_Decoration_Flat
+    visible = "[And(GetPlayer.IsValid, GetScriptedGui('nhe47_md_manager_visible').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+    vbox = {
+        set_parent_size_to_minimum = yes
+        layoutpolicy_horizontal = expanding
+        header_pattern = {
+            layoutpolicy_horizontal = expanding
+            blockoverride "header_text" { text = "nhe47_md_manager" }
+            blockoverride "button_close" { onclick = "[GetScriptedGui('nhe47_md_close').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]" }
+        }
+        divider_light = { layoutpolicy_horizontal = expanding }
+        vbox = {
+            layoutpolicy_horizontal = expanding
+            margin = { 20 18 }
+            spacing = 10
+            hbox = {
+                layoutpolicy_horizontal = expanding
+                spacing = 10
+
+                button_standard = { size = { 170 36 } text = "nhe47_md_refresh" onclick = "[GetScriptedGui('nhe47_md_refresh').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]" }
+                expand = {}
+            }
+            text_multi = { layoutpolicy_horizontal = expanding using = Font_Size_Small text = "nhe47_md_empty" }
+            hbox = {
+                name = "nhe47_md_title_list_rail"
+                layoutpolicy_horizontal = expanding
+                size = { 0 480 }
+                minimumsize = { 0 480 }
+            scrollarea = {
+                name = "nhe47_md_title_scrollarea"
+                layoutpolicy_vertical = expanding
+                size = { 860 480 }
+                minimumsize = { 860 480 }
+                maximumsize = { -1 480 }
+                autoresizescrollarea = no
+                scrollbarpolicy_horizontal = always_off
+                scrollbarpolicy_vertical = always_on
+                background = { using = Background_Area_Border }
+                scrollbar_vertical = { using = Scrollbar_Vertical }
+                scrollwidget = {
+                    vbox = {
+                        layoutpolicy_horizontal = expanding
+                    vbox = {
+                        layoutpolicy_horizontal = expanding
+                        layoutpolicy_vertical = fixed
+                        margin = { 10 8 }
+                        margin_right = 18
+                        spacing = 6
+                        datamodel = "[GetPlayer.MakeScope.GetList('nhe47_md_titles')]"
+                        item = {
+                            hbox = {
+                                datacontext = "[Scope.Title]"
+                                size = { 0 72 }
+                                minimumsize = { 0 72 }
+                                layoutpolicy_vertical = fixed
+                                layoutpolicy_horizontal = expanding
+                                margin = { 8 6 }
+                                spacing = 10
+                                background = { using = Background_Area }
+                                coa_title_tiny = { size = { 36 36 } }
+                                vbox = {
+                                    size = { 280 0 }
+                                    layoutpolicy_vertical = growing
+                                    spacing = 3
+                                    text_multi = { size = { 280 0 } max_width = 280 autoresize = yes align = left text = "[Title.GetName] · [Title.MakeScope.Var('nhe47_md_display_number').GetValue|0]" tooltip = "[Title.GetName] · [Title.MakeScope.Var('nhe47_md_display_number').GetValue|0]" }
+                                    text_single = { layoutpolicy_horizontal = expanding align = left using = Font_Size_Small visible = "[GetScriptedGui('nhe47_md_default').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End)]" text = "nhe47_md_default" }
+                                    text_single = { layoutpolicy_horizontal = expanding align = left using = Font_Size_Small visible = "[Not(GetScriptedGui('nhe47_md_default').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End))]" text = "nhe47_md_aux" }
+                                }
+                                expand = {}
+                                button_standard = { size = { 160 36 } text = "nhe47_md_open_short" tooltip = "nhe47_md_open" enabled = "[GetScriptedGui('nhe47_md_open').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End)]" onclick = "[GetScriptedGui('nhe47_md_open').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End)]" }
+                                button_standard = { size = { 170 36 } text = "nhe47_md_swap_short" tooltip = "nhe47_md_swap_supported_tt" enabled = "[GetScriptedGui('nhe47_md_prepare_swap').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End)]" onclick = "[GetScriptedGui('nhe47_md_prepare_swap').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('selected_title',Title.MakeScope).End)]" }
+
+                            }
+                        }
+                    }
+                        expand = {}
+                    }
+                }
+            }
+                expand = {}
+            }
+            hbox = {
+                layoutpolicy_horizontal = expanding
+                text_single = { using = Font_Size_Small text = "nhe47_md_count" }
+                expand = {}
+
+            }
+
+        }
+    }
+}
+# Deferred one-click relay, same native binding and execution order as R5.
+window = {
+    name = "nhe47_md_open_relay"
+    layer = middle
+    size = { 0 0 }
+    alwaystransparent = yes
+    state = {
+        name = nhe47_md_pending
+        trigger_when = "[And( GetPlayer.IsValid, GetScriptedGui( 'nhe47_md_open_pending' ).IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+        on_start = "[ToggleGameViewData('domicile', GetPlayer.MakeScope.Var('nhe47_md_open_domicile').Domicile)]"
+        on_start = "[GetScriptedGui( 'nhe47_md_open_clear' ).Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+    }
+}

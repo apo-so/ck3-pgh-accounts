@@ -1,0 +1,30 @@
+﻿nhe47_md_validation_allowed = { always = no }
+
+nhe47_md_has_selected_domicile = {
+    exists = scope:selected_title
+    scope:selected_title = { exists = holder exists = title_domicile }
+}
+
+nhe47_md_selected_bound = {
+    nhe47_md_has_selected_domicile = yes
+    scope:selected_title = { has_variable = nhe47_md_view_domicile var:nhe47_md_view_domicile = title_domicile }
+}
+
+nhe47_md_pending_open_valid = {
+    exists = var:nhe47_md_open_title
+    exists = var:nhe47_md_open_domicile
+    var:nhe47_md_open_title = { exists = holder exists = title_domicile title_domicile = root.var:nhe47_md_open_domicile }
+}
+
+nhe47_md_selected_swap_supported = {
+    exists = domicile
+    nhe47_md_has_selected_domicile = yes
+    OR = {
+        AND = { domicile = { is_domicile_type = estate } scope:selected_title = { title_domicile = { is_domicile_type = estate } } }
+        AND = { domicile = { nhe72_is_east_asian_estate_trigger = yes } scope:selected_title = { title_domicile = { nhe72_is_east_asian_estate_trigger = yes } } }
+        AND = { domicile = { is_domicile_type = japanese_manor } scope:selected_title = { title_domicile = { is_domicile_type = japanese_manor } } }
+            AND = { domicile = { is_domicile_type = camp } scope:selected_title = { title_domicile = { is_domicile_type = camp } } }
+        AND = { domicile = { is_domicile_type = yurt } scope:selected_title = { title_domicile = { is_domicile_type = yurt } } }
+        AND = { domicile = { is_domicile_type = ecclesiastical_domicile } scope:selected_title = { title_domicile = { is_domicile_type = ecclesiastical_domicile } } }
+    }
+}

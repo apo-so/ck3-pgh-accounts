@@ -1,0 +1,6 @@
+﻿l_simp_chinese:
+ nhe45_consolidated_title:0 "官职庄园自动整理"
+ nhe45_result_owner:0 "[SCOPE.sC('nhe45_actor').GetShortUIName]：已拆除[nhe45_message_removed|0]处多余辅助庄园。"
+ nhe45_result_assets:0 "兵士[nhe45_message_maa|0]团（现员[nhe45_message_troops|0]）转入主头衔；牧群[nhe45_message_herd|2]、补给[nhe45_message_provisions|2]转入默认住所。"
+ nhe45_result_refund:0 "建筑原生拆除返还：金币[nhe45_message_gold|2]，威望[nhe45_message_prestige|2]，虔诚[nhe45_message_piety|2]，影响力[nhe45_message_influence|2]。"
+ nhe45_result_remaining:0 "另有[nhe45_message_retained|0]处暂时保留：尚有资产未完成转移，或归属需要核对；未销毁这些载体。"

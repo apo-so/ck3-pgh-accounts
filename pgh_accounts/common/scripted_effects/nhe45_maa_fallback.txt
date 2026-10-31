@@ -1,0 +1,83 @@
+# Source title scope. Native route first; TMM create/copy/destroy only on observed refusal.
+nhe45_transfer_regiments_effect = {
+ debug_log = "NHE45|MAA|ENTER_TRANSFER_FIX007"
+ every_in_list = { list = nhe45_source_regiments remove_from_list = nhe45_source_regiments }
+ every_owned_title_maa_regiment = { add_to_list = nhe45_source_regiments }
+ scope:nhe45_actor = { set_variable = { name = nhe45_maa_incomplete value = 0 } }
+ every_in_list = { list = nhe45_source_regiments transfer_title_maa = scope:nhe45_primary }
+ transfer_title_maa_ownership = scope:nhe45_primary
+ every_in_list = {
+  list = nhe45_source_regiments
+  debug_log = "NHE45|MAA|ITERATE_SOURCE_REGIMENT"
+  save_scope_as = nhe45_old_regiment
+  if = {
+   limit = { regiment_owning_title = scope:nhe45_primary regiment_controlling_title = scope:nhe45_primary }
+   nhe45_record_regiment_effect = yes
+  }
+  else_if = {
+   limit = { regiment_owning_title = scope:nhe45_source }
+   scope:nhe45_actor = { nhe45_rebuild_regiment_effect = yes }
+  }
+  else = { scope:nhe45_actor = { change_variable = { name = nhe45_maa_incomplete add = 1 } } }
+ }
+}
+# Regiment scope. Count actual verified destination regiment, not the requested transfer.
+nhe45_record_regiment_effect = {
+ save_scope_value_as = { name = nhe45_regiment_troops value = maa_current_troops_count }
+ scope:nhe45_actor = {
+  change_variable = { name = nhe45_maa add = 1 }
+  change_variable = { name = nhe45_troops add = scope:nhe45_regiment_troops }
+ }
+}
+# Character scope; exact old regiment is still owned by our proven source A.
+# TMM technique, with before/after identity difference instead of its size=200 sentinel.
+nhe45_rebuild_regiment_effect = {
+ every_in_list = { list = nhe45_target_before_regiments remove_from_list = nhe45_target_before_regiments }
+ clear_saved_scope = nhe45_new_regiment
+ scope:nhe45_primary = { every_owned_title_maa_regiment = { add_to_list = nhe45_target_before_regiments } }
+ set_variable = { name = nhe45_new_regiment_count value = 0 }
+ set_variable = { name = nhe45_old_size value = scope:nhe45_old_regiment.maa_size }
+ set_variable = { name = nhe45_old_troops value = scope:nhe45_old_regiment.maa_current_troops_count }
+ create_maa_regiment = {
+  type_of = scope:nhe45_old_regiment
+  check_can_recruit = no
+  title = scope:nhe45_primary
+  size = var:nhe45_old_size
+ }
+ scope:nhe45_primary = {
+  every_owned_title_maa_regiment = {
+   limit = { NOT = { is_in_list = nhe45_target_before_regiments } }
+   save_scope_as = nhe45_new_regiment
+   scope:nhe45_actor = { change_variable = { name = nhe45_new_regiment_count add = 1 } }
+  }
+ }
+ if = {
+  limit = { var:nhe45_new_regiment_count = 1 exists = scope:nhe45_new_regiment }
+  scope:nhe45_new_regiment = {
+   change_maa_troops_count = { value = scope:nhe45_actor.var:nhe45_old_troops subtract = maa_current_troops_count }
+  }
+  if = {
+   limit = {
+    scope:nhe45_source = { nhe45_source_route_trigger = yes }
+    scope:nhe45_old_regiment = { regiment_owning_title = scope:nhe45_source }
+    scope:nhe45_new_regiment = {
+     regiment_owning_title = scope:nhe45_primary
+     regiment_controlling_title = scope:nhe45_primary
+     maa_size = scope:nhe45_actor.var:nhe45_old_size
+     maa_current_troops_count = scope:nhe45_actor.var:nhe45_old_troops
+    }
+   }
+   scope:nhe45_old_regiment = { destroy_maa_regiment = yes }
+  }
+ }
+ if = {
+  limit = { NOT = { exists = scope:nhe45_old_regiment } exists = scope:nhe45_new_regiment }
+  scope:nhe45_new_regiment = { nhe45_record_regiment_effect = yes }
+  debug_log = "NHE45|MAA|TMM_REBUILD_VERIFIED"
+ }
+ else = {
+  change_variable = { name = nhe45_maa_incomplete add = 1 }
+  debug_log = "NHE45|MAA|TMM_REBUILD_INCOMPLETE_SOURCE_RETAINED"
+ }
+ every_in_list = { list = nhe45_target_before_regiments remove_from_list = nhe45_target_before_regiments }
+}

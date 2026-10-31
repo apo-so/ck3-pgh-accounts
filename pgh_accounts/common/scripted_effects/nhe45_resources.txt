@@ -1,0 +1,29 @@
+# Character scope; source is exact title_domicile and destination is actual actor.domicile.
+nhe45_move_resources_effect = {
+ set_variable = { name = nhe45_requested value = scope:nhe45_source_dom.herd }
+ set_variable = { name = nhe45_target_before value = scope:nhe45_default.herd }
+ if = { limit = { var:nhe45_requested > 0 scope:nhe45_source = { nhe45_source_route_trigger = yes } }
+  scope:nhe45_default = { change_herd = scope:nhe45_actor.var:nhe45_requested }
+  set_variable = { name = nhe45_received value = { value = scope:nhe45_default.herd subtract = var:nhe45_target_before min = 0 max = var:nhe45_requested } }
+  scope:nhe45_source_dom = { change_herd = { value = scope:nhe45_actor.var:nhe45_received multiply = -1 } }
+  set_variable = { name = nhe45_debited value = { value = var:nhe45_requested subtract = scope:nhe45_source_dom.herd min = 0 max = var:nhe45_received } }
+  # If native debit refused part of the observed credit, return that excess only.
+  if = { limit = { var:nhe45_debited < var:nhe45_received }
+   scope:nhe45_default = { change_herd = { value = scope:nhe45_actor.var:nhe45_debited subtract = scope:nhe45_actor.var:nhe45_received } }
+  }
+  change_variable = { name = nhe45_herd add = var:nhe45_debited }
+ }
+ set_variable = { name = nhe45_requested value = scope:nhe45_source_dom.provisions }
+ set_variable = { name = nhe45_target_before value = scope:nhe45_default.provisions }
+ if = { limit = { var:nhe45_requested > 0 scope:nhe45_source = { nhe45_source_route_trigger = yes } }
+  scope:nhe45_default = { change_provisions = scope:nhe45_actor.var:nhe45_requested }
+  set_variable = { name = nhe45_received value = { value = scope:nhe45_default.provisions subtract = var:nhe45_target_before min = 0 max = var:nhe45_requested } }
+  scope:nhe45_source_dom = { change_provisions = { value = scope:nhe45_actor.var:nhe45_received multiply = -1 } }
+  set_variable = { name = nhe45_debited value = { value = var:nhe45_requested subtract = scope:nhe45_source_dom.provisions min = 0 max = var:nhe45_received } }
+  # If native debit refused part of the observed credit, return that excess only.
+  if = { limit = { var:nhe45_debited < var:nhe45_received }
+   scope:nhe45_default = { change_provisions = { value = scope:nhe45_actor.var:nhe45_debited subtract = scope:nhe45_actor.var:nhe45_received } }
+  }
+  change_variable = { name = nhe45_provisions add = var:nhe45_debited }
+ }
+}

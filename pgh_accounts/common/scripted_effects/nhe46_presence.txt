@@ -1,0 +1,22 @@
+# Ordinary office scope. A proven destroyed auxiliary is absent, not an asset held elsewhere.
+# Never clear a live title, unknown-origin title, or native noble-family domicile.
+nhe46_release_destroyed_pair_effect = {
+ if = {
+  limit = {
+   exists = var:nhe19_aux
+   var:nhe19_aux = {
+    has_variable = nhe19_carrier
+    has_variable = nhe19_origin_schema
+    var:nhe19_origin_schema = 30
+    is_noble_family_title = no
+    var:nhe19_source_office = prev
+    is_title_created = no
+    NOT = { exists = holder }
+   }
+  }
+  var:nhe19_aux = {
+   save_scope_as = nhe45_source
+   nhe45_unlink_destroyed_effect = yes
+  }
+ }
+}

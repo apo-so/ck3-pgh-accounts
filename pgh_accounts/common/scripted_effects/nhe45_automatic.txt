@@ -1,0 +1,198 @@
+# Character entry. hidden_effect_new_object only hides tooltip errors for new objects.
+# OFFLINE004: named event lists are explicitly cleared; the wrapper is not an isolation boundary.
+nhe45_process_effect = {
+ hidden_effect_new_object = {
+  if = {
+   limit = { nhe19_enabled_trigger = yes is_alive = yes NOT = { has_variable = nhe19_dying } NOT = { has_variable = nhe19_mutating } NOT = { has_variable = nhe45_running } }
+   save_scope_as = nhe45_actor
+   set_variable = nhe45_running
+   # First finish proven office handoffs. Never create once per office.
+   every_held_title = {
+    limit = { nhe19_ordinary_office_trigger = yes }
+    nhe46_release_destroyed_pair_effect = yes
+    if = { limit = { has_variable = nhe5_office_aux NOT = { has_variable = nhe19_aux } } nhe19_import_pair_effect = yes }
+    if = { limit = { has_variable = nhe19_registered } nhe19_reconcile_effect = yes }
+   }
+   nhe45_select_keep_effect = yes
+   if = {
+    limit = {
+     NOT = { nhe46_current_keep_trigger = yes }
+     NOT = { any_held_title = { has_variable = nhe19_carrier } }
+     # An unresolved known A elsewhere is not a missing A.
+     NOT = { any_held_title = { OR = { has_variable = nhe19_aux has_variable = nhe19_creating has_variable = nhe19_create_failed } } }
+    }
+    clear_saved_scope = nhe45_create_office
+    primary_title ?= { if = { limit = { nhe19_new_office_trigger = yes } save_scope_as = nhe45_create_office } }
+    if = { limit = { NOT = { nhe46_current_create_office_trigger = yes } }
+     every_held_title = { limit = { nhe19_new_office_trigger = yes NOT = { nhe46_current_create_office_trigger = yes } } save_scope_as = nhe45_create_office }
+    }
+    if = { limit = { nhe46_current_create_office_trigger = yes } scope:nhe45_create_office = { nhe19_create_effect = yes } }
+    nhe45_select_keep_effect = yes
+   }
+   # Completed old manual receipts can be archived without another payment.
+   nhe19_archive_receipt_effect = yes
+   if = {
+    limit = { nhe46_current_keep_trigger = yes NOT = { has_variable = nhe19_sale_stage } any_held_title = { nhe19_proven_origin_trigger = yes NOT = { this = scope:nhe45_keep } } }
+    nhe45_consolidate_effect = yes
+   }
+   if = { limit = { nhe46_current_keep_trigger = yes } set_variable = { name = nhe19_active_aux value = scope:nhe45_keep } }
+   remove_variable = nhe45_running
+   nhe19_refresh_actor_effect = yes
+  }
+ }
+}
+
+# Character scope, explicit actor. Keep the default auxiliary when it is one of ours.
+# Native house/default domicile stays separate and is never a deletion candidate.
+nhe45_select_keep_effect = {
+ # Queued callbacks can inherit a keep from an earlier actor. Every existence test also validates ownership.
+ clear_saved_scope = nhe45_keep
+ if = { limit = { has_domicile = yes }
+  every_held_title = { limit = { nhe45_available_carrier_trigger = yes title_domicile = scope:nhe45_actor.domicile } save_scope_as = nhe45_keep }
+ }
+ if = { limit = { NOT = { nhe46_current_keep_trigger = yes } }
+  primary_title ?= { if = { limit = { nhe45_available_carrier_trigger = yes } save_scope_as = nhe45_keep } }
+ }
+ if = { limit = { NOT = { nhe46_current_keep_trigger = yes } }
+  primary_title.var:nhe19_aux ?= { if = { limit = { nhe45_available_carrier_trigger = yes holder = scope:nhe45_actor } save_scope_as = nhe45_keep } }
+ }
+ if = { limit = { NOT = { nhe46_current_keep_trigger = yes } exists = var:nhe19_active_aux }
+  var:nhe19_active_aux = { if = { limit = { nhe45_available_carrier_trigger = yes holder = scope:nhe45_actor } save_scope_as = nhe45_keep } }
+ }
+ if = { limit = { NOT = { nhe46_current_keep_trigger = yes } }
+  every_held_title = { limit = { nhe45_available_carrier_trigger = yes NOT = { nhe46_current_keep_trigger = yes } } save_scope_as = nhe45_keep }
+ }
+}
+
+# Character scope. Snapshot the sources before destroying titles in a separate loop.
+nhe45_consolidate_effect = {
+ every_in_list = { list = nhe45_sources remove_from_list = nhe45_sources }
+ clear_saved_scope = nhe45_primary
+ clear_saved_scope = nhe45_default
+ primary_title ?= { save_scope_as = nhe45_primary }
+ domicile ?= { save_scope_as = nhe45_default }
+ set_variable = { name = nhe45_removed value = 0 }
+ set_variable = { name = nhe45_retained value = 0 }
+ set_variable = { name = nhe45_herd value = 0 }
+ set_variable = { name = nhe45_provisions value = 0 }
+ set_variable = { name = nhe45_maa value = 0 }
+ set_variable = { name = nhe45_troops value = 0 }
+ set_variable = { name = nhe45_gold_before value = gold }
+ set_variable = { name = nhe45_prestige_before value = prestige }
+ set_variable = { name = nhe45_piety_before value = piety }
+ set_variable = { name = nhe45_influence_before value = influence }
+ every_held_title = {
+  limit = { nhe19_proven_origin_trigger = yes NOT = { this = scope:nhe45_keep } }
+  add_to_list = nhe45_sources
+ }
+ set_variable = nhe19_mutating
+ every_in_list = { list = nhe45_sources nhe45_merge_one_effect = yes }
+ every_in_list = { list = nhe45_sources remove_from_list = nhe45_sources }
+ remove_variable = nhe19_mutating
+ set_variable = { name = nhe45_gold value = { value = gold subtract = var:nhe45_gold_before } }
+ set_variable = { name = nhe45_prestige value = { value = prestige subtract = var:nhe45_prestige_before } }
+ set_variable = { name = nhe45_piety value = { value = piety subtract = var:nhe45_piety_before } }
+ set_variable = { name = nhe45_influence value = { value = influence subtract = var:nhe45_influence_before } }
+ if = {
+  limit = { OR = { var:nhe45_removed > 0 var:nhe45_retained > 0 } }
+  if = { limit = { is_ai = no } nhe45_notice_effect = yes }
+  else = { every_liege_or_above = { limit = { is_ai = no } nhe45_notice_effect = yes } }
+ }
+}
+
+# Source landed_title; exact source D, primary title and default D are separate identities.
+nhe45_merge_one_effect = {
+ hidden_effect_new_object = {
+  every_in_list = { list = nhe45_source_regiments remove_from_list = nhe45_source_regiments }
+  save_scope_as = nhe45_source
+  if = {
+   limit = { nhe45_source_route_trigger = yes }
+   title_domicile = { save_scope_as = nhe45_source_dom }
+   set_variable = nhe19_redeeming
+   # Preserve native regiment IDs where possible; use verified rebuild fallback on refusal.
+   nhe45_transfer_regiments_effect = yes
+   scope:nhe45_actor = { nhe45_move_resources_effect = yes }
+   if = {
+    limit = {
+     nhe45_source_route_trigger = yes
+     NOT = { any_owned_title_maa_regiment = {} }
+     scope:nhe45_actor = { var:nhe45_maa_incomplete = 0 }
+     title_domicile = { herd = 0 provisions = 0 }
+    }
+    title_domicile = { nhe45_liquidate_buildings_effect = yes }
+    # An unrecognized building cannot silently disappear without its native refund.
+    if = {
+     limit = { nhe45_source_route_trigger = yes title_domicile = { num_domicile_buildings = 0 herd = 0 provisions = 0 } }
+     scope:nhe45_actor = { destroy_title = scope:nhe45_source }
+    }
+   }
+   if = { limit = { NOT = { exists = holder } is_title_created = no }
+    nhe45_unlink_destroyed_effect = yes
+    scope:nhe45_actor = { change_variable = { name = nhe45_removed add = 1 } }
+    debug_log = "NHE45|AUTO|SOURCE_DESTROYED"
+   }
+   else = {
+    scope:nhe45_actor = { change_variable = { name = nhe45_retained add = 1 } }
+    debug_log = "NHE45|AUTO|SOURCE_REMAINDER_PRESERVED"
+   }
+   remove_variable = nhe19_redeeming
+  }
+  else = { scope:nhe45_actor = { change_variable = { name = nhe45_retained add = 1 } } }
+  every_in_list = { list = nhe45_source_regiments remove_from_list = nhe45_source_regiments }
+ }
+}
+
+# Only remove the destroyed A's own binding. Ordinary office titles remain intact.
+nhe45_unlink_destroyed_effect = {
+ var:nhe19_source_office ?= {
+  if = { limit = { var:nhe19_aux = scope:nhe45_source }
+   remove_variable = nhe19_aux
+   remove_variable = nhe19_dom
+   remove_variable = nhe19_registered
+   remove_variable = nhe19_verified_holder
+   remove_variable = nhe19_last_native_holder
+   remove_variable = nhe19_known_custodian
+   remove_variable = nhe19_pending
+   remove_variable = nhe19_review
+   remove_variable = nhe19_create_failed
+   remove_list_global_variable = { name = nhe19_offices target = this }
+   if = { limit = { var:nhe5_office_aux = scope:nhe45_source } remove_variable = nhe5_office_aux remove_variable = nhe10_bound_dom }
+  }
+ }
+ remove_list_global_variable = { name = nhe19_carriers target = scope:nhe45_source }
+}
+
+# A bounded registry pass, snapshot owners before processing can change the registry.
+nhe45_recover_owners_effect = {
+ hidden_effect_new_object = {
+  every_in_list = { list = nhe45_registry_owners remove_from_list = nhe45_registry_owners }
+  every_in_global_list = {
+   variable = nhe19_carriers
+   holder ?= { if = { limit = { NOT = { is_in_list = nhe45_registry_owners } } add_to_list = nhe45_registry_owners } }
+  }
+  every_in_list = { list = nhe45_registry_owners nhe45_process_effect = yes }
+  every_in_list = { list = nhe45_registry_owners remove_from_list = nhe45_registry_owners }
+ }
+}
+
+# Recipient character (owner or human liege); owner stays explicit in the copied message scopes.
+nhe45_notice_effect = {
+ send_interface_message = {
+  type = nhe45_consolidated
+  left_icon = scope:nhe45_actor
+  save_scope_value_as = { name = nhe45_message_removed value = scope:nhe45_actor.var:nhe45_removed }
+  save_scope_value_as = { name = nhe45_message_retained value = scope:nhe45_actor.var:nhe45_retained }
+  save_scope_value_as = { name = nhe45_message_herd value = scope:nhe45_actor.var:nhe45_herd }
+  save_scope_value_as = { name = nhe45_message_provisions value = scope:nhe45_actor.var:nhe45_provisions }
+  save_scope_value_as = { name = nhe45_message_maa value = scope:nhe45_actor.var:nhe45_maa }
+  save_scope_value_as = { name = nhe45_message_troops value = scope:nhe45_actor.var:nhe45_troops }
+  save_scope_value_as = { name = nhe45_message_gold value = scope:nhe45_actor.var:nhe45_gold }
+  save_scope_value_as = { name = nhe45_message_prestige value = scope:nhe45_actor.var:nhe45_prestige }
+  save_scope_value_as = { name = nhe45_message_piety value = scope:nhe45_actor.var:nhe45_piety }
+  save_scope_value_as = { name = nhe45_message_influence value = scope:nhe45_actor.var:nhe45_influence }
+  custom_tooltip = nhe45_result_owner
+  custom_tooltip = nhe45_result_assets
+  custom_tooltip = nhe45_result_refund
+  if = { limit = { scope:nhe45_actor = { var:nhe45_retained > 0 } } custom_tooltip = nhe45_result_remaining }
+ }
+}

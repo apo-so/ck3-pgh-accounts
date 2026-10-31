@@ -1,0 +1,2 @@
+﻿# Domicile scope. Lightweight explicit salvage policy, not paid-cost accounting.
+nhe19_salvage_value = { value = num_domicile_buildings subtract = 1 min = 0 multiply = 50 }

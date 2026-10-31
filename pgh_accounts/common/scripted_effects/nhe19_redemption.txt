@@ -1,0 +1,167 @@
+# Character scope. Click-time native resources only; no balance tick/escrow.
+nhe19_redeem_effect = {
+ nhe19_audit_registry_effect = yes
+ if = { limit = { nhe19_sale_selection_trigger = yes }
+  save_scope_as = nhe19_sale_actor
+  set_variable = { name = nhe19_sale_source_dom value = var:nhe19_sale_source.title_domicile }
+  set_variable = { name = nhe19_sale_quote value = var:nhe19_sale_source.title_domicile.nhe19_salvage_value }
+  set_variable = { name = nhe19_source_before value = var:nhe19_sale_source_dom.herd }
+  set_variable = { name = nhe19_sale_stage value = 1 }
+  set_variable = nhe19_mutating
+  var:nhe19_sale_source = { set_variable = nhe19_redeeming }
+  if = { limit = { exists = var:nhe19_sale_target }
+   set_variable = { name = nhe19_sale_target_dom value = var:nhe19_sale_target.title_domicile }
+   set_variable = { name = nhe19_target_before value = var:nhe19_sale_target_dom.herd }
+   nhe19_merge_herd_effect = yes
+  }
+  if = { limit = {
+   NOT = { has_variable = nhe19_sale_review }
+   nhe19_sale_route_trigger = yes
+   var:nhe19_sale_source.title_domicile = var:nhe19_sale_source_dom
+  }
+   if = { limit = { var:nhe19_sale_source_dom = { herd = 0 provisions = 0 } }
+    set_variable = { name = nhe19_sale_stage value = 2 }
+    nhe19_finish_sale_effect = yes
+   }
+   else = {
+    # Verified partial/native refusal. Keep A/D; safe receipt can be released by player.
+    set_variable = { name = nhe19_sale_stage value = 6 }
+    debug_log = "NHE19|SALE|NATIVE_PARTIAL_PRESERVED_NO_GOLD"
+   }
+  }
+  else = { set_variable = nhe19_sale_review debug_log = "NHE19|SALE|UNVERIFIED_STOP_NO_DELETE_NO_GOLD" }
+  remove_variable = nhe19_mutating
+  nhe19_refresh_actor_effect = yes
+ }
+}
+# Stage 2 follows verified herd transfer. Unsupported assets remain protected.
+nhe19_finish_sale_effect = {
+ if = { limit = {
+  nhe19_enabled_trigger = yes is_alive = yes
+  trigger_if = { limit = { has_variable = nhe19_sale_stage } var:nhe19_sale_stage = 2 }
+  trigger_else = { always = no }
+  nhe19_sale_route_trigger = yes
+  var:nhe19_sale_source.title_domicile = var:nhe19_sale_source_dom
+  var:nhe19_sale_source_dom = { herd = 0 provisions = 0 }
+ }
+  save_scope_as = nhe19_sale_actor
+  if = { limit = {
+   # User protection: exact Mod origin; never NF/native; never any office's last A.
+   var:nhe19_sale_source = {
+    nhe19_surplus_identity_trigger = yes holder = scope:nhe19_sale_actor
+    title_domicile = scope:nhe19_sale_actor.var:nhe19_sale_source_dom
+    title_domicile = { herd = 0 provisions = 0 }
+    NOT = { any_owned_title_maa_regiment = {} }
+   }
+  }
+   var:nhe19_sale_source = { set_delete_on_destroy = yes }
+   set_variable = nhe19_sale_destroy_issued
+   destroy_title = var:nhe19_sale_source
+   if = { limit = { nhe19_sale_destroyed_trigger = yes }
+    set_variable = { name = nhe19_sale_stage value = 3 }
+    nhe19_settle_effect = yes
+   }
+   else = { set_variable = nhe19_sale_review debug_log = "NHE19|SALE|DELETION_UNVERIFIED_STOP" }
+  }
+  else = { set_variable = nhe19_sale_review debug_log = "NHE19|SALE|FINAL_OBJECT_OR_MAA_STOP" }
+ }
+}
+nhe19_verify_sale_effect = {
+ if = { limit = {
+  nhe19_enabled_trigger = yes is_alive = yes
+  trigger_if = { limit = { has_variable = nhe19_sale_stage } var:nhe19_sale_stage = 2 }
+  trigger_else = { always = no }
+  nhe19_sale_destroyed_trigger = yes
+ }
+  set_variable = { name = nhe19_sale_stage value = 3 }
+  nhe19_settle_effect = yes
+ }
+}
+# Stage 3 alone can begin payment. Stage 4 is ambiguous and never automatically replayed.
+nhe19_settle_effect = {
+ if = { limit = {
+  nhe19_enabled_trigger = yes is_alive = yes
+  trigger_if = { limit = { has_variable = nhe19_sale_stage } var:nhe19_sale_stage = 3 }
+  trigger_else = { always = no }
+  has_variable = nhe19_sale_quote
+  nhe19_sale_destroyed_trigger = yes
+ }
+  set_variable = { name = nhe19_gold_before value = gold }
+  set_variable = { name = nhe19_gold_expected value = { value = gold add = var:nhe19_sale_quote } }
+  set_variable = { name = nhe19_sale_stage value = 4 }
+  add_gold = var:nhe19_sale_quote
+  if = { limit = { gold = var:nhe19_gold_expected }
+   set_variable = { name = nhe19_sale_stage value = 5 }
+   remove_variable = nhe19_sale_review
+   remove_variable = nhe19_mutating
+   debug_log = "NHE37|SALE|COMPLETE_NATIVE_DESTROYED_SALVAGE_ONCE"
+  }
+  else = { set_variable = nhe19_sale_review debug_log = "NHE19|SALE|GOLD_UNVERIFIED_STAGE4_STOP" }
+ }
+}
+nhe19_clear_receipt_effect = {
+ remove_variable = nhe19_sale_destroy_issued
+ remove_variable = nhe19_sale_stage
+ remove_variable = nhe19_sale_review
+ remove_variable = nhe19_source_before
+ remove_variable = nhe19_provisions_before
+ remove_variable = nhe19_target_before
+ remove_variable = nhe19_target_provisions_before
+ remove_variable = nhe19_gold_before
+ remove_variable = nhe19_gold_expected
+ remove_variable = nhe19_target_expected
+ remove_variable = nhe19_sale_room
+ remove_variable = nhe19_sale_source_dom
+ remove_variable = nhe19_sale_target_dom
+ remove_variable = nhe19_move_source_before
+ remove_variable = nhe19_move_target_before
+ remove_variable = nhe19_move_received
+ remove_variable = nhe19_move_moved
+ remove_variable = nhe19_move_source_expected
+ remove_variable = nhe19_move_target_expected
+ nhe19_clear_selection_effect = yes
+}
+nhe19_archive_receipt_effect = {
+ if = { limit = {
+  trigger_if = { limit = { has_variable = nhe19_sale_stage } var:nhe19_sale_stage = 5 }
+  trigger_else = { always = no }
+ }
+  set_variable = { name = nhe19_last_sale_gold value = var:nhe19_sale_quote }
+  nhe19_clear_receipt_effect = yes
+ }
+}
+# Release verified partial (6), or pre-payment stage 2 while both exact objects survive.
+# No reverse movement/no gold. Ambiguous phase 1 or 4 cannot take this route.
+nhe19_release_sale_effect = {
+ if = { limit = { nhe19_release_sale_trigger = yes }
+  var:nhe19_sale_source = { remove_variable = nhe19_redeeming nhe19_protect_effect = yes }
+  nhe19_clear_receipt_effect = yes
+  nhe19_refresh_actor_effect = yes
+ }
+}
+# Explicit normal management action; only owned, originally proven extra A qualifies.
+nhe19_classify_actor_effect = {
+ if = { limit = { nhe19_enabled_trigger = yes NOT = { has_variable = nhe19_sale_stage } }
+  nhe19_audit_registry_effect = yes
+  every_held_title = {
+   limit = { nhe19_carrier_trigger = yes }
+   remove_variable = nhe19_surplus_certified
+   if = { limit = { nhe19_proven_origin_trigger = yes exists = var:nhe19_source_office }
+    var:nhe19_source_office = { save_scope_as = nhe19_certified_office }
+    nhe19_certify_duplicate_effect = yes
+   }
+  }
+  nhe19_refresh_actor_effect = yes
+ }
+}
+nhe19_certify_duplicate_effect = {
+ if = { limit = {
+  nhe19_proven_origin_trigger = yes
+  var:nhe19_origin_office = scope:nhe19_certified_office
+  var:nhe19_source_office = scope:nhe19_certified_office
+  scope:nhe19_certified_office = { nhe19_pair_exists_trigger = yes NOT = { var:nhe19_aux = prev } }
+  NOT = { any_in_global_list = { variable = nhe19_offices var:nhe19_aux = prev } }
+ }
+  set_variable = nhe19_surplus_certified
+ }
+}

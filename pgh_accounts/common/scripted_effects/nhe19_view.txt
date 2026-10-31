@@ -1,0 +1,98 @@
+﻿# Character scope. Rebuild from real ownership; the index is presentation only.
+nhe19_refresh_view_effect = {
+ save_scope_as = nhe19_view_owner
+ if = { limit = { NOT = { has_variable = nhe19_sale_quote } } set_variable = { name = nhe19_sale_quote value = 0 } }
+ remove_variable = nhe19_view_title
+ remove_variable = nhe19_view_dom
+ remove_variable = nhe19_view_office
+ set_variable = { name = nhe19_view_count value = 0 }
+ every_held_title = {
+  limit = { nhe19_carrier_trigger = yes }
+  scope:nhe19_view_owner = { change_variable = { name = nhe19_view_count add = 1 } }
+ }
+ if = { limit = { NOT = { has_variable = nhe19_view_index } } set_variable = { name = nhe19_view_index value = 1 } }
+ if = {
+  limit = {
+   trigger_if = {
+    limit = { has_variable = nhe19_view_index has_variable = nhe19_view_count }
+    OR = { var:nhe19_view_index < 1 var:nhe19_view_index > var:nhe19_view_count }
+   }
+   trigger_else = { always = no }
+  }
+  set_variable = { name = nhe19_view_index value = 1 }
+ }
+ set_variable = { name = nhe19_view_cursor value = 0 }
+ every_held_title = {
+  limit = { nhe19_carrier_trigger = yes }
+  save_scope_as = nhe19_view_candidate
+  scope:nhe19_view_owner = {
+   change_variable = { name = nhe19_view_cursor add = 1 }
+   if = {
+    limit = {
+     trigger_if = {
+      limit = { has_variable = nhe19_view_cursor has_variable = nhe19_view_index }
+      var:nhe19_view_cursor = var:nhe19_view_index
+     }
+     trigger_else = { always = no }
+    }
+    set_variable = { name = nhe19_view_title value = scope:nhe19_view_candidate }
+    set_variable = { name = nhe19_view_dom value = scope:nhe19_view_candidate.title_domicile }
+    if = { limit = { exists = scope:nhe19_view_candidate.var:nhe19_source_office } set_variable = { name = nhe19_view_office value = scope:nhe19_view_candidate.var:nhe19_source_office } }
+   }
+  }
+ }
+ remove_variable = nhe19_view_cursor
+ if = {
+  limit = { exists = var:nhe19_sale_source.title_domicile NOT = { has_variable = nhe19_sale_stage } }
+  set_variable = { name = nhe19_sale_quote value = var:nhe19_sale_source.title_domicile.nhe19_salvage_value }
+ }
+}
+nhe19_select_source_effect = {
+ nhe19_audit_registry_effect = yes
+ if = {
+  limit = { NOT = { has_variable = nhe19_sale_stage } var:nhe19_view_title ?= { nhe19_extra_source_trigger = yes holder = prev } }
+  set_variable = { name = nhe19_sale_source value = var:nhe19_view_title }
+  set_variable = { name = nhe19_selected_source_dom value = var:nhe19_view_title.title_domicile }
+  set_variable = { name = nhe19_selected_source_herd value = var:nhe19_view_title.title_domicile.herd }
+  set_variable = { name = nhe19_selected_source_buildings value = var:nhe19_view_title.title_domicile.num_domicile_buildings }
+  # The current office D is the default retained target; player may choose another.
+  if = { limit = { nhe19_active_valid_trigger = yes NOT = { var:nhe19_active_aux = var:nhe19_sale_source } }
+   set_variable = { name = nhe19_sale_target value = var:nhe19_active_aux }
+   set_variable = { name = nhe19_selected_target_dom value = var:nhe19_active_aux.title_domicile }
+  }
+  nhe19_refresh_view_effect = yes
+ }
+}
+nhe19_select_target_effect = {
+ nhe19_audit_registry_effect = yes
+ if = {
+  limit = { nhe19_select_target_trigger = yes }
+  set_variable = { name = nhe19_sale_target value = var:nhe19_view_title }
+  set_variable = { name = nhe19_selected_target_dom value = var:nhe19_view_title.title_domicile }
+  set_variable = { name = nhe19_selected_target_herd value = var:nhe19_view_title.title_domicile.herd }
+ }
+}
+nhe19_clear_selection_effect = {
+ if = {
+  limit = { NOT = { has_variable = nhe19_sale_stage } }
+  remove_variable = nhe19_sale_source
+  remove_variable = nhe19_sale_target
+  remove_variable = nhe19_sale_quote
+  remove_variable = nhe19_selected_source_dom
+  remove_variable = nhe19_selected_source_herd
+  remove_variable = nhe19_selected_source_buildings
+  remove_variable = nhe19_selected_target_dom
+  remove_variable = nhe19_selected_target_herd
+ }
+}
+
+nhe19_select_active_effect = {
+ if = { limit = {
+  nhe19_enabled_trigger = yes
+  exists = var:nhe19_view_title
+  var:nhe19_view_title = { nhe19_proven_origin_trigger = yes holder = prev }
+ }
+  set_variable = { name = nhe19_active_aux value = var:nhe19_view_title }
+  nhe19_refresh_actor_effect = yes
+ }
+}

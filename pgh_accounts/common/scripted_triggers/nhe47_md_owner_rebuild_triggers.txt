@@ -1,0 +1,4 @@
+﻿nhe47_md_same_owner_rebuild_requirements_valid = {
+    # Rebuilding a transferred snapshot is not an ordinary player construction order.
+    always = yes
+}

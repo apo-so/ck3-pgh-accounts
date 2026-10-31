@@ -1,0 +1,34 @@
+﻿nhe47_md_add_building_named_effect = {
+    set_variable = { name = nhe47_md_scripted_building_add value = yes }
+    owner = { set_variable = { name = nhe47_md_scripted_building_rebuild value = yes } }
+    add_domicile_building = $BUILDING$
+    owner = { remove_variable = nhe47_md_scripted_building_rebuild }
+    remove_variable = nhe47_md_scripted_building_add
+    if = {
+        limit = { has_domicile_building = $BUILDING$ exists = owner owner = { debug_only = yes nhe47_md_validation_allowed = yes } }
+        save_scope_as = nhe47_md_message_building_domicile
+        owner = {
+            if = {
+                limit = { any_held_title = { exists = title_domicile title_domicile = scope:nhe47_md_message_building_domicile } }
+                every_held_title = {
+                    limit = { exists = title_domicile title_domicile = scope:nhe47_md_message_building_domicile }
+                    save_scope_as = nhe47_md_message_building_title
+                }
+                send_interface_message = {
+                    type = nhe47_md_building_adjusted
+                    left_icon = this
+                    custom_tooltip = nhe47_md_building_adjusted_desc
+                    custom_tooltip = $BUILDING$_domicile_building
+                }
+            }
+            else = {
+                send_interface_message = {
+                    type = nhe47_md_building_adjusted
+                    left_icon = this
+                    custom_tooltip = nhe47_md_building_title_unknown_desc
+                    custom_tooltip = $BUILDING$_domicile_building
+                }
+            }
+        }
+    }
+}

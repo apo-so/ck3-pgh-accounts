@@ -1,0 +1,4 @@
+﻿nhe47_md_pair_japanese_aspirations_valid = {
+    # User-requested transfer of existing buildings ignores construction aspirations.
+    always = yes
+}

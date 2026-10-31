@@ -1,0 +1,15 @@
+﻿namespace = nhe47_md
+nhe47_md.0200 = {
+    type = character_event
+    title = nhe47_md_swap_title
+    desc = nhe47_md_swap_desc
+    theme = stewardship
+    option = { name = nhe47_md_swap_confirm trigger = { nhe47_md_own_pair_valid = yes } hidden_effect = { nhe47_md_commit_own_swap_effect = yes } }
+    option = { name = nhe47_md_cancel hidden_effect = { nhe47_md_own_swap_clear_effect = yes } }
+}
+
+nhe47_md.0201 = { type = character_event title = nhe47_md_swap_done_title desc = nhe47_md_swap_done_desc theme = stewardship option = { name = nhe47_md_ok } }
+
+nhe47_md.0202 = { type = character_event title = nhe47_md_swap_stopped_title desc = nhe47_md_swap_stopped_desc theme = stewardship option = { name = nhe47_md_ok } }
+
+nhe47_md.0203 = { type = character_event title = nhe47_md_swap_failed_title desc = nhe47_md_swap_failed_desc theme = stewardship option = { name = nhe47_md_ok } }

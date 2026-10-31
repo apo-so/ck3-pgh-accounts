@@ -1,0 +1,22 @@
+﻿nhe19_source_label = {
+ type = character
+ text = { trigger = { exists = var:nhe19_sale_source } localization_key = NHE19_UI_SOURCE }
+ text = { trigger = { NOT = { exists = var:nhe19_sale_source } } localization_key = NHE19_UI_SOURCE_NONE fallback = yes }
+}
+nhe19_target_label = {
+ type = character
+ text = { trigger = { exists = var:nhe19_sale_target } localization_key = NHE19_UI_TARGET }
+ text = { trigger = { NOT = { exists = var:nhe19_sale_target } } localization_key = NHE19_UI_TARGET_NONE fallback = yes }
+}
+
+nhe19_active_label = {
+ type = character
+ text = { trigger = { nhe19_active_valid_trigger = yes } localization_key = NHE19_UI_ACTIVE }
+ text = { trigger = { NOT = { nhe19_active_valid_trigger = yes } } localization_key = NHE19_UI_ACTIVE_NONE fallback = yes }
+}
+nhe19_view_status = {
+ type = character
+ text = { trigger = { exists = var:nhe19_view_title var:nhe19_view_title = var:nhe19_active_aux } localization_key = NHE19_UI_REQUIRED }
+ text = { trigger = { var:nhe19_view_title ?= { nhe19_proven_origin_trigger = yes } } localization_key = NHE19_UI_EXTRA }
+ text = { localization_key = NHE19_UI_PROTECTED fallback = yes }
+}

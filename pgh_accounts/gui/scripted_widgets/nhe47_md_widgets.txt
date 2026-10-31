@@ -1,0 +1,2 @@
+﻿gui/nhe47_md_manager.gui = nhe47_md_manager_window
+gui/nhe47_md_manager.gui = nhe47_md_open_relay

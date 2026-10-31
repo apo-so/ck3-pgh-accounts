@@ -1,0 +1,147 @@
+﻿# Additive callbacks; root/scope contracts from current installed on_actions.
+on_title_gain = { on_actions = { nhe19_title_gain } }
+on_title_lost = { on_actions = { nhe19_title_lost } }
+on_title_gain_inheritance = { on_actions = { nhe19_inheritance } }
+on_title_destroyed = { on_actions = { nhe19_destroyed } }
+on_death = { on_actions = { nhe19_before_death } }
+on_government_change = { on_actions = { nhe19_government } }
+on_vassal_gained = { on_actions = { nhe19_vassal_gained } }
+on_vassal_change = { on_actions = { nhe19_vassal_changed } }
+on_game_start_after_lobby = { on_actions = { nhe19_start } }
+mpo_the_great_steppe_yearly_pulse = { on_actions = { nhe19_yearly } }
+quarterly_playable_pulse = { on_actions = { nhe46_quarterly } }
+
+nhe19_title_gain = {
+ effect = {
+  # Native promotion can step down the auxiliary even if its office is retained.
+  # Record only this observed native route; ordinary grants never extend provenance.
+  if = {
+   limit = {
+    scope:transfer_type = flag:stepped_down
+    exists = scope:title
+    exists = scope:previous_holder
+    NOT = { has_variable = nhe19_mutating }
+   }
+   nhe19_record_native_carrier_successor_effect = yes
+  }
+  if = {
+   limit = { nhe19_enabled_trigger = yes NOT = { has_variable = nhe19_mutating } }
+   scope:title ?= {
+    if = {
+     limit = { has_variable = nhe19_carrier is_noble_family_title = no }
+     root = { set_variable = nhe19_estate_access set_variable = nhe19_managed }
+     nhe19_protect_effect = yes
+    }
+    if = {
+     limit = { has_variable = nhe19_registered }
+     if = { limit = { exists = scope:previous_holder } set_variable = { name = nhe19_last_office_holder value = scope:previous_holder } }
+     nhe19_reconcile_effect = yes
+    }
+   }
+   nhe19_process_lineage_effect = yes
+   nhe19_queue_effect = yes
+   scope:previous_holder ?= { nhe19_refresh_actor_effect = yes nhe19_queue_effect = yes }
+  }
+ }
+}
+nhe19_title_lost = {
+ effect = {
+  if = {
+   limit = { nhe19_enabled_trigger = yes NOT = { has_variable = nhe19_mutating } }
+   scope:title ?= { nhe19_reconcile_effect = yes }
+   nhe19_refresh_actor_effect = yes
+   nhe19_queue_effect = yes
+   scope:new_holder ?= { nhe19_process_lineage_effect = yes nhe19_queue_effect = yes }
+  }
+ }
+}
+nhe19_inheritance = {
+ effect = {
+  if = {
+   # Record proven native inheritance even while maintenance is paused.
+   # Reconcile/process/queue each retain their own enabled guard.
+   limit = { exists = scope:title exists = scope:previous_holder }
+   nhe19_record_native_carrier_successor_effect = yes
+   nhe19_process_lineage_effect = yes
+   nhe19_queue_effect = yes
+  }
+ }
+}
+nhe19_destroyed = {
+ effect = {
+  if = {
+   limit = { nhe19_enabled_trigger = yes }
+   scope:landed_title ?= {
+    if = {
+     limit = { has_variable = nhe19_registered exists = var:nhe19_aux }
+     var:nhe19_aux = { set_variable = nhe19_retired set_variable = nhe19_office_destroyed }
+    }
+    if = {
+     limit = { has_variable = nhe19_carrier NOT = { has_variable = nhe19_redeeming } exists = var:nhe19_source_office }
+     var:nhe19_source_office = { set_variable = nhe19_review set_variable = nhe19_pending }
+    }
+   }
+   nhe19_refresh_actor_effect = yes
+  }
+ }
+}
+nhe19_before_death = {
+ effect = {
+  if = {
+   limit = { nhe19_enabled_trigger = yes }
+   # root is still alive here. Do not infer the appointed successor or move resources.
+   set_variable = nhe19_dying
+   every_held_title = { limit = { nhe19_carrier_trigger = yes } nhe19_protect_effect = yes }
+  }
+ }
+}
+nhe19_government = { effect = { nhe19_process_lineage_effect = yes nhe19_queue_effect = yes } }
+nhe19_vassal_gained = {
+ effect = {
+  nhe19_process_lineage_effect = yes
+  scope:vassal ?= { nhe19_process_lineage_effect = yes nhe19_queue_effect = yes }
+ }
+}
+nhe19_vassal_changed = { effect = { nhe19_process_lineage_effect = yes nhe19_queue_effect = yes } }
+nhe19_start = {
+ effect = {
+  debug_log = "NHE39|START|IMMEDIATE_STRUCTURE_CHECK"
+  nhe19_recover_registered_effect = yes
+  nhe19_steppe_sweep_effect = yes
+  # Vanilla after-lobby effects and child on_actions execute concurrently.
+  # One post-setup check; no self-scheduling or monthly resource accounting.
+  trigger_event = { on_action = nhe19_start_after_setup days = 1 }
+ }
+}
+nhe19_start_after_setup = {
+ effect = {
+  debug_log = "NHE39|START|POST_SETUP_STRUCTURE_CHECK"
+  nhe19_recover_registered_effect = yes
+  nhe19_steppe_sweep_effect = yes
+ }
+}
+nhe19_yearly = { effect = { nhe19_recover_registered_effect = yes } }
+nhe19_deferred = {
+ effect = {
+  remove_variable = nhe19_queued
+  nhe19_process_actor_effect = yes
+  # No self-scheduling. One publication check after a real callback.
+ }
+}
+
+# Native quarterly character callback: no situation participant discovery or herd accounting.
+nhe46_quarterly = {
+ trigger = {
+  nhe19_enabled_trigger = yes
+  is_alive = yes
+  OR = {
+   nhe46_steppe_realm_trigger = yes
+   any_held_title = { has_variable = nhe19_carrier }
+   any_held_title = { has_variable = nhe19_registered }
+  }
+ }
+ effect = {
+  debug_log = "NHE46|QUARTERLY|CHARACTER_CHECK"
+  nhe19_process_actor_effect = yes
+ }
+}

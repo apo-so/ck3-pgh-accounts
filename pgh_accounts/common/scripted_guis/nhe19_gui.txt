@@ -1,0 +1,64 @@
+﻿nhe19_ui_visible = {
+ scope = character
+ is_shown = { has_variable = nhe19_ui_open }
+}
+
+nhe19_ui_valid_view = {
+ scope = character
+ is_shown = { exists = var:nhe19_view_title }
+}
+
+nhe19_ui_close = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = {  }
+ effect = { remove_variable = nhe19_ui_open }
+}
+
+nhe19_ui_next = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = {  }
+ effect = { change_variable = { name = nhe19_view_index add = 1 } nhe19_refresh_view_effect = yes }
+}
+
+nhe19_ui_previous = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = {  }
+ effect = { change_variable = { name = nhe19_view_index add = -1 } nhe19_refresh_view_effect = yes }
+}
+
+nhe19_ui_refresh = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = {  }
+ effect = { nhe19_audit_registry_effect = yes nhe19_refresh_actor_effect = yes }
+}
+
+nhe19_ui_source = { scope = character is_shown = { always = no } is_valid = { always = no } effect = {} }
+
+nhe19_ui_target = { scope = character is_shown = { always = no } is_valid = { always = no } effect = {} }
+
+nhe19_ui_clear = { scope = character is_shown = { always = no } is_valid = { always = no } effect = {} }
+
+nhe19_ui_active = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = { nhe19_enabled_trigger = yes exists = var:nhe19_view_title var:nhe19_view_title ?= { nhe19_proven_origin_trigger = yes holder = prev } }
+ effect = { nhe19_select_active_effect = yes }
+}
+nhe19_ui_has_active = {
+ scope = character
+ is_shown = { nhe19_active_valid_trigger = yes exists = var:nhe19_active_dom }
+}
+nhe19_ui_valid_office = {
+ scope = character
+ is_shown = { exists = var:nhe19_view_office }
+}
+nhe19_ui_classify = {
+ scope = character
+ is_shown = { always = yes }
+ is_valid = { nhe19_enabled_trigger = yes NOT = { has_variable = nhe19_sale_stage } }
+ effect = { nhe19_audit_registry_effect = yes nhe19_process_actor_effect = yes }
+}

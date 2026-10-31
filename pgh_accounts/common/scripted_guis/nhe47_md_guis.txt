@@ -1,0 +1,85 @@
+﻿nhe47_md_open = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { nhe47_md_has_selected_domicile = yes }
+    effect = { if = { limit = { nhe47_md_has_selected_domicile = yes } nhe47_md_open_request_effect = yes } }
+}
+
+nhe47_md_bound = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { nhe47_md_selected_bound = yes }
+}
+
+nhe47_md_default = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { exists = domicile nhe47_md_has_selected_domicile = yes scope:selected_title = { title_domicile = root.domicile } }
+}
+
+nhe47_md_open_pending = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { nhe47_md_pending_open_valid = yes }
+}
+
+nhe47_md_open_clear = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { always = yes }
+    effect = { if = { limit = { always = yes } remove_variable = nhe47_md_open_title remove_variable = nhe47_md_open_domicile } }
+}
+
+nhe47_md_manager_visible = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { has_variable = nhe47_md_manager_visible }
+}
+
+nhe47_md_manager_open = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { is_ai = no }
+    effect = { if = { limit = { is_ai = no } nhe47_md_open_manager_effect = yes } }
+}
+
+nhe47_md_refresh = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { is_ai = no }
+    effect = { if = { limit = { is_ai = no } nhe47_md_refresh_effect = yes } }
+}
+
+nhe47_md_close = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { always = yes }
+    effect = { if = { limit = { always = yes } remove_variable = nhe47_md_manager_visible } }
+}
+
+nhe47_md_prepare_swap = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = {
+        nhe47_md_has_selected_domicile = yes
+        custom_description = { text = nhe47_md_swap_supported_tt nhe47_md_selected_swap_supported = yes }
+        scope:selected_title = { holder = root title_domicile != root.domicile }
+        exists = domicile
+        
+        
+    }
+    effect = { nhe47_md_prepare_own_swap_effect = yes }
+}
+
+nhe47_md_title_swap_visible = {
+    scope = character
+    is_shown = { nhe47_md_has_selected_domicile = yes scope:selected_title = { holder = root } }
+    is_valid = { always = yes }
+}
+
+nhe47_md_bind_title_card = {
+    scope = character
+    is_shown = { always = yes }
+    is_valid = { nhe47_md_has_selected_domicile = yes }
+    effect = { nhe47_md_bind_selected_effect = yes }
+}

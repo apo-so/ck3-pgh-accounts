@@ -1,0 +1,18 @@
+﻿# Domicile scope. Shared building family; herd capability remains type-specific.
+nhe72_is_east_asian_estate_trigger = {
+ OR = { is_domicile_type = east_asian_estate is_domicile_type = nhe72_palace_estate }
+}
+# Title scope: inspect the actual newly created title, not the holder default.
+nhe72_title_has_palace_estate_trigger = {
+ exists = title_domicile
+ title_domicile = { is_domicile_type = nhe72_palace_estate }
+}
+
+domicile_is_estate_trigger = {
+	OR = {
+		is_domicile_type = estate
+		is_domicile_type = east_asian_estate
+		is_domicile_type = nhe72_palace_estate
+		is_domicile_type = japanese_manor
+	}
+}

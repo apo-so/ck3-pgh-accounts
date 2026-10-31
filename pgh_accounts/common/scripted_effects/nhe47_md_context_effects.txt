@@ -1,0 +1,49 @@
+﻿nhe47_md_bind_selected_effect = {
+    if = {
+        limit = { exists = scope:selected_title }
+        scope:selected_title = {
+            remove_variable = nhe47_md_view_domicile
+            if = { limit = { exists = holder exists = title_domicile } set_variable = { name = nhe47_md_view_domicile value = title_domicile } }
+        }
+    }
+}
+
+nhe47_md_refresh_effect = {
+    clear_variable_list = nhe47_md_titles
+    set_variable = { name = nhe47_md_title_count value = 0 }
+    every_held_title = {
+        remove_variable = nhe47_md_view_domicile
+        if = {
+            limit = { exists = title_domicile holder = root }
+            set_variable = { name = nhe47_md_view_domicile value = title_domicile }
+            save_scope_as = nhe47_md_row_title
+            root = { add_to_variable_list = { name = nhe47_md_titles target = scope:nhe47_md_row_title } change_variable = { name = nhe47_md_title_count add = 1 } }
+            set_variable = { name = nhe47_md_display_number value = root.var:nhe47_md_title_count }
+        }
+    }
+}
+
+nhe47_md_open_request_effect = {
+    if = {
+        limit = { nhe47_md_validation_allowed = yes }
+        remove_variable = nhe47_md_last_requested_title
+        remove_variable = nhe47_md_last_requested_domicile
+        set_variable = { name = nhe47_md_last_request_status value = flag:invalid }
+    }
+    remove_variable = nhe47_md_open_title
+    remove_variable = nhe47_md_open_domicile
+    nhe47_md_bind_selected_effect = yes
+    if = {
+        limit = { nhe47_md_selected_bound = yes }
+        set_variable = { name = nhe47_md_open_title value = scope:selected_title }
+        set_variable = { name = nhe47_md_open_domicile value = scope:selected_title.title_domicile }
+        if = {
+            limit = { nhe47_md_validation_allowed = yes }
+            set_variable = { name = nhe47_md_last_requested_title value = scope:selected_title }
+            set_variable = { name = nhe47_md_last_requested_domicile value = scope:selected_title.title_domicile }
+            set_variable = { name = nhe47_md_last_request_status value = flag:requested }
+        }
+    }
+}
+
+nhe47_md_open_manager_effect = { nhe47_md_refresh_effect = yes set_variable = { name = nhe47_md_manager_visible value = yes } }

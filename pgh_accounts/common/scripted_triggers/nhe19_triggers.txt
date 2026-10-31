@@ -1,0 +1,213 @@
+﻿# Scope contracts: carrier/ordinary/office/extra = landed_title; governor = character.
+nhe19_enabled_trigger = { NOT = { has_global_variable = nhe19_paused } }
+nhe19_carrier_trigger = {
+ has_variable = nhe19_carrier
+ is_landless_type_title = yes
+ is_noble_family_title = no
+ tier = tier_county
+ exists = title_domicile
+ title_domicile ?= { nhe72_is_east_asian_estate_trigger = yes }
+}
+nhe19_ordinary_office_trigger = {
+ is_landless_type_title = no
+ is_noble_family_title = no
+ tier >= tier_county
+ # Ordinary ruler primary title or existing appointed office. Native domicile titles stay excluded.
+ OR = {
+  holder ?= { primary_title = prev }
+  has_title_law = appointment_succession_law
+  has_title_law = celestial_appointment_succession_law
+  has_title_law = celestial_military_appointment_succession_law
+  # Current vanilla is_candidate_for_title_trigger also accepts holder realm laws.
+  holder ?= { OR = {
+   has_realm_law = appointment_succession_law
+   has_realm_law = celestial_appointment_succession_law
+   has_realm_law = celestial_military_appointment_succession_law
+   has_realm_law = meritocratic_appointment_succession_law
+  } }
+  has_variable = nhe19_registered
+ }
+}
+nhe19_governor_trigger = {
+ is_alive = yes
+ NOT = { has_variable = nhe19_dying }
+ has_government = steppe_admin_government
+}
+# Character scope. The old PGH rule covers direct and subordinate counties.
+# User requirement: palace rulers, including independent rulers; capital location is irrelevant.
+nhe46_steppe_realm_trigger = {
+ nhe19_governor_trigger = yes
+ is_landed = yes
+ exists = situation:the_great_steppe
+ any_sub_realm_county = {
+  any_county_situation = { this = situation:the_great_steppe }
+ }
+}
+nhe19_new_office_trigger = {
+ has_tgp_dlc_trigger = yes
+ has_mpo_dlc_trigger = yes
+ nhe19_ordinary_office_trigger = yes
+ exists = holder
+ holder ?= { nhe46_steppe_realm_trigger = yes }
+}
+# Root T. A valid object elsewhere is still this office's existing asset.
+nhe19_pair_exists_trigger = {
+ exists = var:nhe19_aux
+ exists = var:nhe19_dom
+ var:nhe19_aux = {
+  nhe19_carrier_trigger = yes
+  var:nhe19_source_office = prev
+  title_domicile = prev.var:nhe19_dom
+  NOT = { has_variable = nhe19_conflict }
+ }
+}
+# Root A. Explicit certification never overrides a living office's canonical pointer.
+nhe19_surplus_identity_trigger = {
+ nhe19_proven_origin_trigger = yes
+ exists = holder
+ NOT = {
+  any_in_global_list = {
+   variable = nhe19_offices
+   OR = { var:nhe19_aux = prev var:nhe19_dom = prev.title_domicile }
+  }
+ }
+ OR = {
+  AND = {
+   has_variable = nhe19_retired
+   has_variable = nhe19_office_destroyed
+   NOT = { exists = var:nhe19_source_office }
+  }
+  AND = {
+   has_variable = nhe19_surplus_certified
+   exists = var:nhe19_source_office
+   var:nhe19_source_office = {
+    nhe19_pair_exists_trigger = yes
+    NOT = { var:nhe19_aux = prev }
+   }
+  }
+ }
+}
+# Legacy manual receipt route only. New automatic transfers use nhe45, including MaA and provisions.
+nhe19_source_assets_trigger = {
+ NOT = { any_owned_title_maa_regiment = {} }
+ title_domicile = { provisions = 0 }
+}
+nhe19_extra_source_trigger = {
+ nhe19_surplus_identity_trigger = yes
+ nhe19_source_assets_trigger = yes
+ NOT = { has_variable = nhe19_redeeming }
+}
+# Character selection checks. A positive herd requires an exact, different owned D.
+nhe19_sale_route_trigger = {
+ nhe19_enabled_trigger = yes
+ is_alive = yes
+ exists = var:nhe19_sale_source
+ var:nhe19_sale_source = { nhe19_surplus_identity_trigger = yes nhe19_source_assets_trigger = yes holder = prev }
+ OR = {
+  var:nhe19_sale_source = {
+   title_domicile = { herd = 0 provisions = 0 }
+   NOT = { any_owned_title_maa_regiment = {} }
+  }
+  AND = {
+   exists = var:nhe19_sale_target
+   NOT = { var:nhe19_sale_source = var:nhe19_sale_target }
+   var:nhe19_sale_target = { nhe19_current_office_carrier_trigger = yes holder = prev }
+   NOT = { var:nhe19_sale_source.title_domicile = var:nhe19_sale_target.title_domicile }
+  }
+ }
+}
+# Selection stores object identity, not a balance frozen before natural herd growth.
+nhe19_sale_selection_trigger = {
+ nhe19_sale_route_trigger = yes
+ NOT = { has_variable = nhe19_sale_stage }
+ var:nhe19_sale_source = { NOT = { has_variable = nhe19_redeeming } }
+ var:nhe19_sale_source.title_domicile = var:nhe19_selected_source_dom
+ trigger_if = {
+  limit = { exists = var:nhe19_sale_target }
+  var:nhe19_sale_target = { nhe19_current_office_carrier_trigger = yes holder = prev }
+  var:nhe19_sale_target.title_domicile = var:nhe19_selected_target_dom
+ }
+}
+nhe19_select_target_trigger = {
+ NOT = { has_variable = nhe19_sale_stage }
+ exists = var:nhe19_view_title
+ var:nhe19_view_title = { nhe19_current_office_carrier_trigger = yes holder = prev }
+}
+
+# A provenance is written only at our native create or exact historical pair adoption.
+# Never infer origin from domicile type, tier, current owner, or display name.
+nhe19_proven_origin_trigger = {
+ nhe19_carrier_trigger = yes
+ trigger_if = { limit = { has_variable = nhe19_origin_schema } var:nhe19_origin_schema = 30 }
+ trigger_else = { always = no }
+ exists = var:nhe19_origin_dom
+ title_domicile = var:nhe19_origin_dom
+}
+nhe19_current_office_carrier_trigger = {
+ nhe19_carrier_trigger = yes
+ exists = holder
+ exists = var:nhe19_source_office
+ var:nhe19_source_office = {
+  nhe19_pair_exists_trigger = yes
+  var:nhe19_aux = prev
+  holder = prev.holder
+ }
+}
+nhe19_active_valid_trigger = {
+ exists = var:nhe19_active_aux
+ var:nhe19_active_aux = { nhe19_proven_origin_trigger = yes holder = prev }
+}
+# Root actor; used again after native credit before authorizing a source debit.
+nhe19_transfer_pair_trigger = {
+ nhe19_sale_route_trigger = yes
+ exists = var:nhe19_sale_target
+ var:nhe19_sale_source.title_domicile = var:nhe19_sale_source_dom
+ var:nhe19_sale_target.title_domicile = var:nhe19_sale_target_dom
+ NOT = { var:nhe19_sale_source_dom = var:nhe19_sale_target_dom }
+}
+
+nhe19_release_sale_trigger = {
+ nhe19_enabled_trigger = yes is_alive = yes
+ trigger_if = { limit = { has_variable = nhe19_sale_stage }
+  OR = {
+   var:nhe19_sale_stage = 6
+   var:nhe19_sale_stage = 2
+  }
+ }
+ trigger_else = { always = no }
+ exists = var:nhe19_sale_source
+ exists = var:nhe19_sale_source_dom
+ var:nhe19_sale_source = {
+  nhe19_surplus_identity_trigger = yes holder = prev
+  title_domicile = prev.var:nhe19_sale_source_dom
+ }
+}
+
+nhe19_finish_sale_trigger = {
+ nhe19_sale_route_trigger = yes
+ trigger_if = { limit = { has_variable = nhe19_sale_stage } var:nhe19_sale_stage = 2 }
+ trigger_else = { always = no }
+ var:nhe19_sale_source.title_domicile = var:nhe19_sale_source_dom
+ var:nhe19_sale_source_dom = { herd = 0 provisions = 0 }
+}
+
+# Actor scope. Native destruction preserves historical title/domicile objects.
+# The receipt is set immediately before our guarded destroy_title call.
+nhe19_sale_destroyed_trigger = {
+ has_variable = nhe19_sale_destroy_issued
+ trigger_if = {
+  limit = { exists = var:nhe19_sale_source }
+  var:nhe19_sale_source = {
+   is_title_created = no
+   NOT = { exists = holder }
+   NOT = { any_owned_title_maa_regiment = {} }
+   trigger_if = {
+    limit = { exists = title_domicile }
+    title_domicile = prev.var:nhe19_sale_source_dom
+   }
+  }
+ }
+ trigger_else = {
+  NOT = { exists = var:nhe19_sale_source_dom }
+ }
+}

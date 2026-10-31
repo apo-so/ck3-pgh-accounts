@@ -1,0 +1,32 @@
+
+# Actor root, exact A/D tuple saved in actor vars. Native credit -> observed debit.
+nhe19_merge_herd_effect = {
+ set_variable = { name = nhe19_move_source_before value = var:nhe19_sale_source_dom.herd }
+ set_variable = { name = nhe19_move_target_before value = var:nhe19_sale_target_dom.herd }
+ if = { limit = { nhe19_transfer_pair_trigger = yes var:nhe19_move_source_before > 0 var:nhe19_move_target_before >= 0 }
+  var:nhe19_sale_target_dom = { change_herd = scope:nhe19_sale_actor.var:nhe19_move_source_before }
+  set_variable = { name = nhe19_move_received value = { value = var:nhe19_sale_target_dom.herd subtract = var:nhe19_move_target_before } }
+  if = { limit = { nhe19_transfer_pair_trigger = yes var:nhe19_move_received >= 0 var:nhe19_move_received <= var:nhe19_move_source_before }
+   if = { limit = { var:nhe19_move_received > 0 }
+    var:nhe19_sale_source_dom = { change_herd = { value = scope:nhe19_sale_actor.var:nhe19_move_received multiply = -1 } }
+   }
+   set_variable = { name = nhe19_move_moved value = { value = var:nhe19_move_source_before subtract = var:nhe19_sale_source_dom.herd } }
+   if = { limit = { nhe19_transfer_pair_trigger = yes var:nhe19_move_moved >= 0 var:nhe19_move_moved <= var:nhe19_move_received }
+    if = { limit = { var:nhe19_move_moved < var:nhe19_move_received }
+     var:nhe19_sale_target_dom = { change_herd = { value = scope:nhe19_sale_actor.var:nhe19_move_moved subtract = scope:nhe19_sale_actor.var:nhe19_move_received } }
+    }
+    set_variable = { name = nhe19_move_source_expected value = { value = var:nhe19_move_source_before subtract = var:nhe19_move_moved } }
+    set_variable = { name = nhe19_move_target_expected value = { value = var:nhe19_move_target_before add = var:nhe19_move_moved } }
+    if = { limit = {
+     nhe19_transfer_pair_trigger = yes
+     var:nhe19_sale_source_dom = { herd = scope:nhe19_sale_actor.var:nhe19_move_source_expected }
+     var:nhe19_sale_target_dom = { herd = scope:nhe19_sale_actor.var:nhe19_move_target_expected }
+    } }
+    else = { set_variable = nhe19_sale_review }
+   }
+   else = { set_variable = nhe19_sale_review }
+  }
+  else = { set_variable = nhe19_sale_review }
+ }
+ else_if = { limit = { var:nhe19_move_source_before < 0 } set_variable = nhe19_sale_review }
+}

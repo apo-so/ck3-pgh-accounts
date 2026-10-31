@@ -1,0 +1,80 @@
+window = {
+ name = "nhe19_office_window"
+ layer = top
+ parentanchor = top|left
+ position = { 25 100 }
+ size = { 760 780 }
+ using = Window_Background
+ visible = "[GetScriptedGui('nhe19_ui_visible').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+ vbox = {
+  margin_top = 20
+  margin_bottom = 24
+  layoutpolicy_horizontal = expanding
+  spacing = 8
+  text_single = { size = { 700 28 } align = nobaseline text = "NHE19_UI_HEADER" }
+  text_single = { text = "NHE19_UI_RULE" }
+  text_single = { text = "[GetPlayer.Custom('nhe19_active_label')]" }
+  hbox = { spacing = 6
+   button_standard = {
+    size = { 345 38 }
+    text = "NHE19_CLASSIFY"
+    enabled = "[GetScriptedGui('nhe19_ui_classify').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+    onclick = "[GetScriptedGui('nhe19_ui_classify').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+   }
+   button_standard = {
+    size = { 345 38 }
+    visible = "[GetScriptedGui('nhe19_ui_has_active').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+    datacontext = "[GetPlayer.MakeScope.Var('nhe19_active_dom').Domicile]"
+    enabled = "[Domicile.IsValid]"
+    text = "NHE19_OPEN_ACTIVE"
+    onclick = "[ToggleGameViewData('domicile', Domicile.Self)]"
+   }
+  }
+  hbox = { spacing = 6 button_standard = {
+ size = { 170 38 }
+ text = "NHE19_PREVIOUS"
+ enabled = "[GetScriptedGui('nhe19_ui_previous').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+ onclick = "[GetScriptedGui('nhe19_ui_previous').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+} button_standard = {
+ size = { 170 38 }
+ text = "NHE19_NEXT"
+ enabled = "[GetScriptedGui('nhe19_ui_next').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+ onclick = "[GetScriptedGui('nhe19_ui_next').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+} button_standard = {
+ size = { 170 38 }
+ text = "NHE19_REFRESH"
+ enabled = "[GetScriptedGui('nhe19_ui_refresh').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+ onclick = "[GetScriptedGui('nhe19_ui_refresh').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+} button_standard = {
+ size = { 170 38 }
+ text = "NHE19_CLOSE"
+ enabled = "[GetScriptedGui('nhe19_ui_close').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+ onclick = "[GetScriptedGui('nhe19_ui_close').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+} }
+  vbox = {
+   visible = "[GetScriptedGui('nhe19_ui_valid_view').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+   spacing = 6
+   text_single = { datacontext = "[GetPlayer.MakeScope.Var('nhe19_view_title').Title]" text = "[Title.GetName]" }
+   text_single = {
+    visible = "[GetScriptedGui('nhe19_ui_valid_office').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+    datacontext = "[GetPlayer.MakeScope.Var('nhe19_view_office').Title]" text = "[Title.GetName]"
+   }
+   text_single = { text = "[GetPlayer.Custom('nhe19_view_status')]" }
+   button_standard = {
+    size = { 700 38 }
+    text = "NHE19_SET_ACTIVE"
+    enabled = "[GetScriptedGui('nhe19_ui_active').IsValid(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+    onclick = "[GetScriptedGui('nhe19_ui_active').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+   }
+   button_standard = {
+    size = { 700 38 }
+    datacontext = "[GetPlayer.MakeScope.Var('nhe19_view_dom').Domicile]"
+    enabled = "[Domicile.IsValid]"
+    text = "NHE19_OPEN_NATIVE"
+    onclick = "[ToggleGameViewData('domicile', Domicile.Self)]"
+   }
+
+  }
+  text_single = { size = { 700 28 } align = nobaseline text = "NHE19_UI_DECISION" }
+ }
+}

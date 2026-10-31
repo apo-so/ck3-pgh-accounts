@@ -1,0 +1,58 @@
+﻿# Exact historical nhe5 T<->A white-list only. No historical code is activated.
+# Title T scope. Unknown character-only legacy carriers block creation, require audit.
+nhe19_import_pair_effect = {
+ if = {
+  limit = {
+   nhe19_enabled_trigger = yes
+   NOT = { has_variable = nhe19_aux }
+   exists = var:nhe5_office_aux
+   OR = { NOT = { has_variable = nhe10_bound_dom } var:nhe10_bound_dom = var:nhe5_office_aux.title_domicile }
+   var:nhe5_office_aux = {
+    has_variable = nhe5_carrier
+    is_noble_family_title = no
+    is_landless_type_title = yes tier = tier_county
+    var:nhe5_source_office = prev
+    exists = title_domicile
+    title_domicile ?= { nhe72_is_east_asian_estate_trigger = yes }
+    NOT = { has_variable = nhe19_source_office }
+   }
+  }
+  save_scope_as = nhe19_import_office
+  set_variable = { name = nhe19_aux value = var:nhe5_office_aux }
+  set_variable = { name = nhe19_dom value = var:nhe5_office_aux.title_domicile }
+  set_variable = nhe19_registered
+  var:nhe19_aux = {
+   set_variable = nhe19_carrier
+   set_variable = { name = nhe19_origin_schema value = 30 }
+   set_variable = { name = nhe19_origin_dom value = title_domicile }
+   set_variable = { name = nhe19_origin_office value = scope:nhe19_import_office }
+   set_variable = { name = nhe19_source_office value = scope:nhe19_import_office }
+   nhe19_protect_effect = yes
+   add_to_global_variable_list = { name = nhe19_carriers target = this }
+  }
+  add_to_global_variable_list = { name = nhe19_offices target = this }
+  if = {
+   limit = {
+    has_variable = nhe10_b2_pending
+    exists = var:nhe10_pending_liege
+    var:nhe10_pending_aux = var:nhe19_aux
+    var:nhe10_pending_dom = var:nhe19_dom
+    var:nhe10_pending_source = var:nhe10_verified_owner
+    var:nhe19_aux = { holder = prev.var:nhe10_pending_liege }
+   }
+   # Only the old exact durable custody tuple is recognized. Never create a K.
+   set_variable = { name = nhe19_known_custodian value = var:nhe10_pending_liege }
+  }
+  if = {
+   limit = { exists = var:nhe10_verified_owner }
+   set_variable = { name = nhe19_verified_holder value = var:nhe10_verified_owner }
+  }
+  else_if = {
+   limit = { var:nhe19_aux = { holder = prev.holder } }
+   set_variable = { name = nhe19_verified_holder value = holder }
+  }
+  else = { set_variable = nhe19_review set_variable = nhe19_pending }
+  debug_log = "NHE19|IMPORT|EXACT_LEGACY_PAIR_NO_RESOURCE_MOVE"
+ }
+ else = { set_variable = nhe19_legacy_review debug_log = "NHE19|IMPORT|UNKNOWN_LEGACY_STOP" }
+}

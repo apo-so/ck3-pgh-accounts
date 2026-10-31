@@ -1,0 +1,6 @@
+﻿l_english:
+ nhe45_consolidated_title:0 "Auxiliary estates consolidated"
+ nhe45_result_owner:0 "[SCOPE.sC('nhe45_actor').GetShortUIName]: [nhe45_message_removed|0] extra auxiliary estates removed."
+ nhe45_result_assets:0 "[nhe45_message_maa|0] regiments ([nhe45_message_troops|0] current troops) moved to the primary title; [nhe45_message_herd|2] herd and [nhe45_message_provisions|2] provisions moved to the default domicile."
+ nhe45_result_refund:0 "Native building refunds: [nhe45_message_gold|2] gold, [nhe45_message_prestige|2] prestige, [nhe45_message_piety|2] piety, [nhe45_message_influence|2] influence."
+ nhe45_result_remaining:0 "[nhe45_message_retained|0] estates remain because some assets or ownership could not be resolved. Those carriers were preserved."

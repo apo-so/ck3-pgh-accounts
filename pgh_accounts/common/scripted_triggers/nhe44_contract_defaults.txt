@@ -1,0 +1,23 @@
+﻿# Character scope, exactly the visible Mod contract populations with initial level0.
+nhe44_herd_default_pending_trigger = {
+OR = {
+ AND = {
+  has_government = steppe_admin_government
+  OR = {
+   has_subject_contract_group = meritocratic_vassal
+   has_subject_contract_group = tributary_steppe
+   has_subject_contract_group = tributary_settled
+  }
+ }
+ AND = {
+  has_government = nomad_government
+  exists = suzerain
+  suzerain = { has_government = steppe_admin_government }
+  OR = {
+   has_subject_contract_group = tributary_steppe
+   has_subject_contract_group = tributary_settled
+  }
+ }
+}
+vassal_contract_obligation_level:nhe42_native_herd = 0
+}

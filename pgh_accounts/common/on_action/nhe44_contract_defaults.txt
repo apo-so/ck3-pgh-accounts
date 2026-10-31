@@ -1,0 +1,3 @@
+﻿# New games: default is already normal in the native definition; mark/repair once.
+on_game_start_after_lobby = { on_actions = { nhe44_initialize_defaults_at_start } }
+nhe44_initialize_defaults_at_start = { effect = { nhe44_initialize_herd_defaults_effect = yes } }

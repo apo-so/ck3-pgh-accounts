@@ -1,0 +1,9 @@
+﻿nhe42_herd_contract_subject_trigger = {
+ OR = {
+  scope:subject = { has_government = steppe_admin_government }
+  AND = {
+   scope:subject = { has_government = nomad_government }
+   scope:liege = { has_government = steppe_admin_government }
+  }
+ }
+}

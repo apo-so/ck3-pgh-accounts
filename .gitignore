@@ -1,0 +1,16 @@
+# Local development and private runtime material
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.pem
+*.key
+*.ck3
+*.log
+logs/
+save games/
+deployments/
+backups/
+.DS_Store
+Thumbs.db

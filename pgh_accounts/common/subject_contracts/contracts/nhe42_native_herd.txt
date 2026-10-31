@@ -1,0 +1,70 @@
+﻿# Native obligation field; no scripted payment or periodic resource loop.
+nhe42_native_herd = {
+ display_mode = tree
+ icon = herd_icon
+ is_shown = { nhe42_herd_contract_subject_trigger = yes }
+ obligation_levels = {
+  nhe42_herd_tax_exempt = {
+   position = { 0 0 }
+   herd = {
+    value = 0
+    if = { limit = { nhe42_herd_contract_subject_trigger = yes } value = exempt_herd_tax }
+   }
+   subject_opinion = 10
+   ai_liege_desire = 1
+   ai_subject_desire = 5
+   score = 2
+  }
+  nhe42_herd_tax_low = {
+   parent = nhe42_herd_tax_exempt
+   position = { 1 0 }
+   herd = {
+    value = 0
+    if = { limit = { nhe42_herd_contract_subject_trigger = yes } value = low_herd_tax }
+   }
+   subject_opinion = 5
+   ai_liege_desire = 2
+   ai_subject_desire = 4
+   score = 1
+  }
+  nhe42_herd_tax_normal = {
+   parent = nhe42_herd_tax_low
+   default = yes
+   position = { 2 0 }
+   herd = {
+    value = 0
+    if = { limit = { nhe42_herd_contract_subject_trigger = yes } value = normal_herd_tax }
+   }
+   subject_opinion = 0
+   ai_liege_desire = 3
+   ai_subject_desire = 3
+   score = 0
+  }
+  nhe42_herd_tax_high = {
+   parent = nhe42_herd_tax_normal
+   position = { 3 0 }
+   herd = {
+    value = 0
+    if = { limit = { nhe42_herd_contract_subject_trigger = yes } value = high_herd_tax }
+   }
+   subject_opinion = -15
+   ai_liege_desire = 4
+   ai_subject_desire = 2
+   score = -1
+   flag = obligation_high_taxes
+  }
+  nhe42_herd_tax_extortionate = {
+   parent = nhe42_herd_tax_high
+   position = { 4 0 }
+   herd = {
+    value = 0
+    if = { limit = { nhe42_herd_contract_subject_trigger = yes } value = extortionate_herd_tax }
+   }
+   subject_opinion = -25
+   ai_liege_desire = 5
+   ai_subject_desire = 1
+   score = -2
+   flag = obligation_high_taxes
+  }
+ }
+}

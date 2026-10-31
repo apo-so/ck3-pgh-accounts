@@ -1,0 +1,26 @@
+﻿# One initial scan; unlike every_ruler, this includes native baron contracts.
+# Never called by a monthly/yearly pulse. Later invocations stop at the saved marker.
+nhe44_initialize_herd_defaults_effect = {
+ if = {
+  limit = { NOT = { has_global_variable = nhe44_herd_defaults_initialized_v2 } }
+  debug_log = "NHE44V2|DEFAULTS|BEGIN"
+  every_living_character = {
+   limit = { nhe44_herd_default_pending_trigger = yes }
+   if = {
+    limit = { is_tributary = yes }
+    tributary_contract_set_obligation_level = { type = nhe42_native_herd level = nhe42_herd_tax_normal }
+   }
+   else = {
+    vassal_contract_set_obligation_level = { type = nhe42_native_herd level = nhe42_herd_tax_normal }
+   }
+   debug_log = "NHE44V2|DEFAULTS|NORMAL_SET"
+  }
+  if = {
+   limit = { NOT = { any_living_character = { nhe44_herd_default_pending_trigger = yes } } }
+   remove_global_variable = nhe44_herd_defaults_initialized
+   set_global_variable = nhe44_herd_defaults_initialized_v2
+   debug_log = "NHE44V2|DEFAULTS|DONE"
+  }
+  else = { debug_log = "NHE44V2|DEFAULTS|INCOMPLETE" }
+ }
+}

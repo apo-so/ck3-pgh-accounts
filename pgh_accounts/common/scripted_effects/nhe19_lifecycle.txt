@@ -1,0 +1,310 @@
+# Title scope A. Proven native protections, no resource snapshot/escrow.
+nhe19_protect_effect = {
+ set_landless_title = yes
+ set_destroy_on_succession = no
+ set_destroy_if_invalid_heir = no
+ set_destroy_on_gain_same_tier = no
+ set_delete_on_destroy = no
+ set_always_follows_primary_heir = no
+}
+# Title scope T. Create once, never treat an object elsewhere as missing.
+nhe19_create_effect = {
+ if = {
+  limit = {
+   nhe19_enabled_trigger = yes
+   nhe19_new_office_trigger = yes
+   NOT = { has_variable = nhe19_aux }
+   NOT = { has_variable = nhe19_dom }
+   NOT = { has_variable = nhe19_creating }
+   NOT = { has_variable = nhe19_create_failed }
+   NOT = { has_variable = nhe5_office_aux }
+   holder = {
+    NOT = { any_held_title = { has_variable = nhe19_carrier } }
+    NOT = { any_held_title = { has_variable = nhe5_carrier NOT = { has_variable = nhe19_carrier } } }
+   }
+  }
+  save_scope_as = nhe19_create_office
+  clear_saved_scope = nhe19_created
+  clear_saved_scope = nhe19_pre_primary
+  holder = {
+   save_scope_as = nhe19_create_owner
+   primary_title = { save_scope_as = nhe19_pre_primary }
+   set_variable = nhe19_estate_access
+   set_variable = nhe19_managed
+   set_variable = nhe19_mutating
+  }
+  set_variable = nhe19_creating
+  add_to_global_variable_list = { name = nhe19_offices target = this }
+  scope:nhe19_create_owner = { create_domicile_title = {
+   name = NHE19_CARRIER_TITLE
+   holder = scope:nhe19_create_owner
+   government = steppe_admin_government
+   tier = county
+   save_scope_as = nhe19_created
+  } }
+  if = {
+   limit = { exists = scope:nhe19_created }
+   # Save the partial result before any validation that may fail.
+   set_variable = { name = nhe19_aux value = scope:nhe19_created }
+   scope:nhe19_created = {
+    set_variable = { name = nhe19_source_office value = scope:nhe19_create_office }
+    if = {
+     limit = { is_noble_family_title = no }
+     set_variable = nhe19_carrier
+     # Old PGH reads the ruler's real primary title and uses its CoA. Preserve that behavior.
+     if = { limit = { exists = scope:nhe19_pre_primary }
+      set_coa = scope:nhe19_pre_primary
+      set_variable = { name = nhe45_creation_primary value = scope:nhe19_pre_primary }
+     }
+     nhe19_protect_effect = yes
+     add_to_global_variable_list = { name = nhe19_carriers target = this }
+    }
+   }
+   if = {
+    limit = { exists = scope:nhe19_created.title_domicile }
+    set_variable = { name = nhe19_dom value = scope:nhe19_created.title_domicile }
+    scope:nhe19_created = {
+     if = { limit = { nhe19_carrier_trigger = yes }
+      set_variable = { name = nhe19_origin_schema value = 30 }
+      set_variable = { name = nhe19_origin_dom value = title_domicile }
+      set_variable = { name = nhe19_origin_office value = scope:nhe19_create_office }
+     }
+    }
+   }
+  }
+  scope:nhe19_create_owner = {
+   if = { limit = { exists = scope:nhe19_pre_primary NOT = { primary_title = scope:nhe19_pre_primary } } set_primary_title_to = scope:nhe19_pre_primary }
+   remove_variable = nhe19_mutating
+  }
+  if = {
+   limit = { nhe19_pair_exists_trigger = yes var:nhe19_aux = { holder = scope:nhe19_create_owner } }
+   set_variable = nhe19_registered
+   set_variable = { name = nhe19_verified_holder value = scope:nhe19_create_owner }
+   debug_log = "NHE19|CREATE|PAIR_COMMIT"
+  }
+  else = {
+   set_variable = nhe19_create_failed
+   debug_log = "NHE19|CREATE|PARTIAL_PRESERVED"
+  }
+  remove_variable = nhe19_creating
+ }
+}
+# Title scope T. New-creation eligibility is intentionally NOT a transfer condition.
+nhe19_reconcile_effect = {
+ if = {
+  limit = { nhe19_enabled_trigger = yes has_variable = nhe19_registered NOT = { has_variable = nhe19_busy } }
+  if = {
+   limit = { nhe19_pair_exists_trigger = yes exists = holder }
+   save_scope_as = nhe19_transfer_office
+   holder = { save_scope_as = nhe19_receiver set_variable = nhe19_estate_access set_variable = nhe19_managed }
+   var:nhe19_aux = { save_scope_as = nhe19_transfer_aux nhe19_protect_effect = yes }
+   # No operation if the native engine already delivered the correct object.
+   if = {
+    limit = { scope:nhe19_transfer_aux = { holder = scope:nhe19_receiver } }
+    set_variable = { name = nhe19_verified_holder value = scope:nhe19_receiver }
+    remove_variable = nhe19_last_native_holder
+    remove_variable = nhe19_known_custodian
+    remove_variable = nhe19_pending
+    remove_variable = nhe19_review
+    scope:nhe19_transfer_aux = { remove_variable = nhe19_retired }
+   }
+   else_if = {
+    limit = {
+     scope:nhe19_receiver = { is_alive = yes }
+     scope:nhe19_transfer_aux = {
+      exists = holder
+      OR = {
+       AND = { exists = scope:nhe19_transfer_office.var:nhe19_verified_holder holder = scope:nhe19_transfer_office.var:nhe19_verified_holder }
+       AND = { exists = scope:nhe19_transfer_office.var:nhe19_last_native_holder holder = scope:nhe19_transfer_office.var:nhe19_last_native_holder }
+       AND = { exists = scope:nhe19_transfer_office.var:nhe19_known_custodian holder = scope:nhe19_transfer_office.var:nhe19_known_custodian }
+      }
+     }
+    }
+    set_variable = nhe19_busy
+    set_variable = nhe19_pending
+    scope:nhe19_transfer_aux.holder = { save_scope_as = nhe19_transfer_source set_variable = nhe19_mutating }
+    clear_saved_scope = nhe19_receiver_primary
+    scope:nhe19_receiver.primary_title ?= { save_scope_as = nhe19_receiver_primary }
+    scope:nhe19_receiver = { set_variable = nhe19_estate_access set_variable = nhe19_managed set_variable = nhe19_mutating }
+    # Revalidate the real T holder immediately before the native title operation.
+    if = {
+     limit = { holder = scope:nhe19_receiver nhe19_pair_exists_trigger = yes }
+     create_title_and_vassal_change = { type = granted save_scope_as = nhe19_title_change add_claim_on_loss = no }
+     scope:nhe19_transfer_aux = { change_title_holder = { holder = scope:nhe19_receiver change = scope:nhe19_title_change } }
+     resolve_title_and_vassal_change = scope:nhe19_title_change
+     clear_saved_scope = nhe19_title_change
+    }
+    if = {
+     limit = { nhe19_pair_exists_trigger = yes holder = scope:nhe19_receiver scope:nhe19_transfer_aux = { holder = scope:nhe19_receiver } }
+     set_variable = { name = nhe19_verified_holder value = scope:nhe19_receiver }
+     remove_variable = nhe19_last_native_holder
+     remove_variable = nhe19_known_custodian
+     remove_variable = nhe19_pending
+     remove_variable = nhe19_review
+     scope:nhe19_transfer_aux = { remove_variable = nhe19_retired }
+     debug_log = "NHE19|TRANSFER|SAME_A_D_COMMIT"
+    }
+    else = { set_variable = nhe19_review debug_log = "NHE19|TRANSFER|PRESERVED_REVIEW" }
+    remove_variable = nhe19_busy
+    scope:nhe19_receiver = {
+     if = { limit = { exists = scope:nhe19_receiver_primary scope:nhe19_receiver_primary = { holder = prev } NOT = { primary_title = scope:nhe19_receiver_primary } } set_primary_title_to = scope:nhe19_receiver_primary }
+     remove_variable = nhe19_mutating
+    }
+    scope:nhe19_transfer_source = { remove_variable = nhe19_mutating nhe19_refresh_actor_effect = yes nhe19_queue_effect = yes }
+   }
+   else = { set_variable = nhe19_pending set_variable = nhe19_review debug_log = "NHE19|TRANSFER|UNKNOWN_HOLDER_STOP" }
+   scope:nhe19_receiver = { nhe19_refresh_actor_effect = yes }
+  }
+  else = {
+   set_variable = nhe19_pending set_variable = nhe19_review
+   if = {
+    limit = { exists = var:nhe19_aux var:nhe19_aux = { NOT = { var:nhe19_source_office = prev } } }
+    var:nhe19_aux = { set_variable = nhe19_conflict }
+   }
+   debug_log = "NHE19|PAIR|MISSING_OR_CONFLICT_STOP"
+  }
+ }
+}
+# Character scope. Only an activity cache; never establishes ownership of all offices.
+# One retained auxiliary per ruler; original office binding still governs its handoff.
+# This does not rewrite the engine's character.domicile or disable other native D.
+nhe19_refresh_actor_effect = {
+ if = { limit = { NOT = { has_variable = nhe19_mutating } }
+  save_scope_as = nhe19_active_owner
+  if = { limit = { NOT = { nhe19_active_valid_trigger = yes } } remove_variable = nhe19_active_aux }
+  # Prefer the native default if it is a current office carrier, otherwise first owned pair.
+  if = { limit = { NOT = { has_variable = nhe19_active_aux } has_domicile = yes }
+   every_held_title = {
+    limit = { nhe19_proven_origin_trigger = yes title_domicile = scope:nhe19_active_owner.domicile }
+    save_scope_as = nhe19_active_candidate
+    scope:nhe19_active_owner = { set_variable = { name = nhe19_active_aux value = scope:nhe19_active_candidate } }
+   }
+  }
+  if = { limit = { NOT = { has_variable = nhe19_active_aux } }
+   every_held_title = {
+    limit = { nhe19_proven_origin_trigger = yes scope:nhe19_active_owner = { NOT = { has_variable = nhe19_active_aux } } }
+    save_scope_as = nhe19_active_candidate
+    scope:nhe19_active_owner = { set_variable = { name = nhe19_active_aux value = scope:nhe19_active_candidate } }
+   }
+  }
+  remove_variable = nhe19_active_dom
+  if = { limit = { nhe19_active_valid_trigger = yes } set_variable = { name = nhe19_active_dom value = var:nhe19_active_aux.title_domicile } }
+  if = { limit = { NOT = { any_held_title = { nhe19_carrier_trigger = yes } } } remove_variable = nhe19_estate_access }
+  nhe19_refresh_view_effect = yes
+ }
+}
+# Character scope. Existing registered offices are maintained even after leaving the steppe.
+nhe19_process_actor_effect = { nhe45_process_effect = yes }
+nhe19_process_lineage_effect = {
+ # A single next-day callback waits for the native multi-title change to finish.
+ nhe19_queue_effect = yes
+ every_liege_or_above = { nhe19_queue_effect = yes }
+}
+# Character scope. One publication check, no fixed repeated-attempt loop.
+nhe19_queue_effect = {
+ if = {
+  limit = { nhe19_enabled_trigger = yes is_alive = yes NOT = { has_variable = nhe19_queued } }
+  set_variable = nhe19_queued
+  trigger_event = { on_action = nhe19_deferred days = 1 }
+ }
+}
+# Empty root allowed. Discover actual rulers directly at opening/load, like old PGH.
+nhe19_steppe_sweep_effect = {
+ if = {
+  limit = { nhe19_enabled_trigger = yes }
+  # Opening/load only. Quarterly checks use their native character root, not a global scan.
+  every_ruler = {
+   limit = { nhe46_steppe_realm_trigger = yes }
+   nhe19_process_actor_effect = yes
+  }
+  debug_log = "NHE46|OPENING|REALM_COUNTY_PASS"
+ }
+}
+# Existing registry only; no world-title discovery and no resource mutations.
+nhe19_recover_registered_effect = {
+ if = {
+  limit = { nhe19_enabled_trigger = yes }
+  nhe19_audit_registry_effect = yes
+  every_in_global_list = {
+   variable = nhe19_offices
+   # Recover a valid partial creation in place; never create a replacement.
+   if = {
+    limit = {
+     OR = { has_variable = nhe19_create_failed has_variable = nhe19_creating has_variable = nhe19_busy }
+     nhe19_pair_exists_trigger = yes exists = holder
+     var:nhe19_aux = { holder = prev.holder }
+    }
+    set_variable = nhe19_registered
+    set_variable = { name = nhe19_verified_holder value = holder }
+    remove_variable = nhe19_create_failed
+    remove_variable = nhe19_creating
+    remove_variable = nhe19_busy
+    holder = {
+     if = {
+      limit = {
+       NOT = { any_held_title = { OR = { has_variable = nhe19_creating has_variable = nhe19_busy } } }
+       NOT = { has_variable = nhe19_sale_stage }
+      }
+      remove_variable = nhe19_mutating
+     }
+    }
+   }
+   nhe19_reconcile_effect = yes
+  }
+  nhe45_recover_owners_effect = yes
+ }
+}
+# One linear structural pass. No nested all-office scan for every pair.
+nhe19_audit_registry_effect = {
+ if = { limit = { nhe19_enabled_trigger = yes }
+ every_in_global_list = {
+  variable = nhe19_carriers
+  remove_variable = nhe19_conflict
+ }
+ every_in_global_list = {
+  variable = nhe19_offices
+  if = {
+   limit = { nhe19_pair_exists_trigger = yes }
+   save_scope_as = nhe19_origin_adopt_office
+   var:nhe19_aux = {
+    if = { limit = { NOT = { has_variable = nhe19_origin_schema } }
+     set_variable = { name = nhe19_origin_schema value = 30 }
+     set_variable = { name = nhe19_origin_dom value = title_domicile }
+     set_variable = { name = nhe19_origin_office value = scope:nhe19_origin_adopt_office }
+    }
+   }
+  }
+  if = {
+   limit = { exists = var:nhe19_aux var:nhe19_aux = { NOT = { var:nhe19_source_office = prev } } }
+   var:nhe19_aux = { set_variable = nhe19_conflict }
+   set_variable = nhe19_review
+  }
+ }
+ }
+}
+
+# Character scope, called only for native inheritance or stepped_down.
+# Native callbacks can be published after several engine transfers.
+# The exact registered T/A/D pair is authoritative; observe current A holder.
+nhe19_record_native_carrier_successor_effect = {
+ scope:title ?= {
+  if = {
+   limit = {
+    nhe19_carrier_trigger = yes
+    exists = holder
+    exists = var:nhe19_source_office
+    var:nhe19_source_office = {
+     has_variable = nhe19_registered
+     nhe19_pair_exists_trigger = yes
+     var:nhe19_aux = prev
+    }
+   }
+   holder = { save_scope_as = nhe19_native_observed_holder }
+   var:nhe19_source_office = {
+    set_variable = { name = nhe19_last_native_holder value = scope:nhe19_native_observed_holder }
+    debug_log = "NHE37|CARRIER|NATIVE_ACTUAL_HOLDER_OBSERVED"
+    nhe19_reconcile_effect = yes
+   }
+  }
+ }
+}

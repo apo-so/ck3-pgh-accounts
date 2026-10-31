@@ -1,0 +1,109 @@
+﻿nhe19_manage_decision = {
+ desc = nhe19_manage_decision_desc
+ confirm_text = nhe19_manage_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = {  }
+ effect = { hidden_effect = { set_variable = nhe19_ui_open nhe19_process_actor_effect = yes nhe19_refresh_actor_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_repair_decision = {
+ desc = nhe19_repair_decision_desc
+ confirm_text = nhe19_repair_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = {  }
+ effect = { hidden_effect = { nhe44_initialize_herd_defaults_effect = yes nhe19_recover_registered_effect = yes nhe19_steppe_sweep_effect = yes nhe19_refresh_actor_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_redeem_decision = {
+ desc = nhe19_redeem_decision_desc
+ confirm_text = nhe19_redeem_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = { custom_tooltip = { text = nhe19_redeem_decision_tooltip nhe19_sale_selection_trigger = yes  } }
+ effect = { hidden_effect = { nhe19_redeem_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_settle_decision = {
+ desc = nhe19_settle_decision_desc
+ confirm_text = nhe19_settle_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = { custom_tooltip = { text = nhe19_settle_decision_tooltip nhe19_sale_destroyed_trigger = yes  } }
+ effect = { hidden_effect = { nhe19_settle_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_verify_decision = {
+ desc = nhe19_verify_decision_desc
+ confirm_text = nhe19_verify_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = { custom_tooltip = { text = nhe19_verify_decision_tooltip nhe19_sale_destroyed_trigger = yes  } }
+ effect = { hidden_effect = { nhe19_verify_sale_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_archive_decision = {
+ desc = nhe19_archive_decision_desc
+ confirm_text = nhe19_archive_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = {  }
+ effect = { hidden_effect = { nhe19_archive_receipt_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_pause_decision = {
+ desc = nhe19_pause_decision_desc
+ confirm_text = nhe19_pause_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = {  }
+ effect = { hidden_effect = { set_global_variable = nhe19_paused } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_resume_decision = {
+ desc = nhe19_resume_decision_desc
+ confirm_text = nhe19_resume_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = {  }
+ effect = { hidden_effect = { remove_global_variable = nhe19_paused nhe19_recover_registered_effect = yes nhe19_steppe_sweep_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_release_decision = {
+ desc = nhe19_release_decision_desc
+ confirm_text = nhe19_release_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = { custom_tooltip = { text = nhe19_release_decision_tooltip nhe19_release_sale_trigger = yes  } }
+ effect = { hidden_effect = { nhe19_release_sale_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}
+
+nhe19_finish_decision = {
+ desc = nhe19_finish_decision_desc
+ confirm_text = nhe19_finish_decision_confirm
+ picture = { reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds" }
+ is_shown = { always = no }
+ is_valid = { custom_tooltip = { text = nhe19_finish_decision_tooltip nhe19_finish_sale_trigger = yes  } }
+ effect = { hidden_effect = { nhe19_audit_registry_effect = yes nhe19_finish_sale_effect = yes nhe19_refresh_actor_effect = yes } }
+ ai_check_interval = 0
+ ai_potential = { always = no }
+}

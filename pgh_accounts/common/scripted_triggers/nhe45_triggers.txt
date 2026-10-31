@@ -1,0 +1,51 @@
+# Source landed_title; each condition protects a concrete asset/identity, not gameplay eligibility.
+nhe45_source_route_trigger = {
+ nhe19_proven_origin_trigger = yes
+ NOT = { has_variable = nhe19_conflict }
+ holder = scope:nhe45_actor
+ NOT = { this = scope:nhe45_keep }
+ NOT = { this = scope:nhe45_primary }
+ exists = scope:nhe45_keep
+ scope:nhe45_keep = { nhe45_available_carrier_trigger = yes holder = scope:nhe45_actor }
+ exists = scope:nhe45_primary
+ scope:nhe45_primary = { holder = scope:nhe45_actor }
+ exists = scope:nhe45_default
+ scope:nhe45_default = { owner = scope:nhe45_actor }
+ scope:nhe45_actor = { primary_title = scope:nhe45_primary domicile = scope:nhe45_default }
+ NOT = { title_domicile = scope:nhe45_default }
+ title_domicile = { owner = scope:nhe45_actor }
+ # A canonical object promised to a different office holder must first finish its handoff.
+ trigger_if = { limit = { exists = var:nhe19_source_office var:nhe19_source_office = { has_variable = nhe19_registered var:nhe19_aux = prev exists = holder } }
+  var:nhe19_source_office = { holder = scope:nhe45_actor }
+ }
+}
+
+# Title held by the current actor and not awaiting a proven handoff to someone else.
+nhe45_available_carrier_trigger = {
+ nhe19_proven_origin_trigger = yes
+ holder = scope:nhe45_actor
+ title_domicile = { owner = scope:nhe45_actor }
+ NOT = { has_variable = nhe19_conflict }
+ trigger_if = {
+  limit = { exists = var:nhe19_source_office var:nhe19_source_office = { has_variable = nhe19_registered var:nhe19_aux = prev exists = holder } }
+  var:nhe19_source_office = { holder = scope:nhe45_actor }
+ }
+}
+
+# Any current scope; actor and selected title are explicit. An inherited event target is not ownership.
+nhe46_current_keep_trigger = {
+ exists = scope:nhe45_actor
+ exists = scope:nhe45_keep
+ scope:nhe45_keep = {
+  nhe45_available_carrier_trigger = yes
+  holder = scope:nhe45_actor
+ }
+}
+nhe46_current_create_office_trigger = {
+ exists = scope:nhe45_actor
+ exists = scope:nhe45_create_office
+ scope:nhe45_create_office = {
+  holder = scope:nhe45_actor
+  nhe19_new_office_trigger = yes
+ }
+}

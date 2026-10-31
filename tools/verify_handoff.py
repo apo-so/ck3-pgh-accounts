@@ -1,8 +1,8 @@
 """Check a standalone project checkout using only Python's standard library."""
 from pathlib import Path
-import hashlib
 import json
 import re
+import runpy
 from urllib.parse import unquote
 
 root = Path(__file__).resolve().parents[1]
@@ -14,6 +14,7 @@ required = [
     'docs/VALIDATION.md', 'docs/evidence/README.md',
     'docs/evidence/manifest.json', 'source-manifest.json',
     'pgh_accounts.mod', 'pgh_accounts/descriptor.mod', 'tools/verify_manifest.py',
+    'tools/project_checks.py',
 ]
 for relative in required:
     if not (root / relative).is_file():
@@ -21,25 +22,17 @@ for relative in required:
 
 def load(relative):
     try:
-        return json.loads((root / relative).read_text(encoding='utf-8'))
+        data = json.loads((root / relative).read_text(encoding='utf-8'))
+        if not isinstance(data, dict):
+            raise ValueError('Expected a JSON object')
+        return data
     except (OSError, ValueError) as exc:
         failures.append('Invalid JSON: ' + relative + ': ' + str(exc))
         return {}
 
-def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-source = load('source-manifest.json')
-expected = {}
-for row in source.get('files', []):
-    path = root / row['path']
-    expected[row['path']] = row['sha256']
-    if not path.is_file() or sha(path) != row['sha256']:
-        failures.append('Source hash mismatch: ' + row['path'])
-actual = {p.relative_to(root).as_posix() for p in (root / 'pgh_accounts').rglob('*') if p.is_file()}
-expected_mod = {x for x in expected if x.startswith('pgh_accounts/')}
-for path in sorted(actual ^ expected_mod):
-    failures.append('Unexpected or missing Mod file: ' + path)
+checks = runpy.run_path(str(root / 'tools/project_checks.py'))
+expected, actual, source_failures = checks['check_source'](root)
+failures.extend(source_failures)
 
 status = load('status.json')
 if status.get('mod_files') != len(actual):
@@ -48,11 +41,8 @@ for key in ['entry', 'handoff', 'next_steps', 'source_map', 'historical_evidence
     if not status.get(key) or not (root / status[key]).is_file():
         failures.append('Invalid status reference: ' + key)
 
-evidence = load('docs/evidence/manifest.json')
-for row in evidence.get('files', []):
-    path = root / row['path']
-    if not path.is_file() or sha(path) != row['sha256']:
-        failures.append('Historical evidence hash mismatch: ' + row['path'])
+evidence, evidence_failures = checks['check_evidence'](root)
+failures.extend(evidence_failures)
 
 links = 0
 public_files = [p for p in root.rglob('*') if p.is_file() and '.git' not in p.relative_to(root).parts]
@@ -81,7 +71,7 @@ for p in public_files:
 result = {
     'status': 'PASS' if not failures else 'FAIL',
     'mod_files': len(actual), 'source_hash_entries': len(expected),
-    'historical_evidence_files': len(evidence.get('files', [])),
+    'historical_evidence_files': len(evidence),
     'relative_links_checked': links, 'failures': failures,
     'scope': 'repository integrity and handoff references only',
     'game_runtime': 'NOT_RUN',

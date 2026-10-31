@@ -1,0 +1,11 @@
+{
+  "reviewed_commit": "2adc0857ea961c89f091a95f996a57ed2b74c3ae",
+  "report_original_sha256": "383b4dbc96e319184022925dcfed169d491cf7ab4be5e3453ab084e58eeec1da",
+  "report_sanitized_sha256": "bb6a52f1bc5c4c8cf6e927c411458a91dfc2465b5203c0101ffe27cb20a40497",
+  "review_agent": "github_only_handoff_review",
+  "chat_history_inherited": false,
+  "project_input": "https://github.com/apo-so/ck3-pgh-accounts only",
+  "source_handoff": "PASS",
+  "original_integrity_gates": "PARTIAL",
+  "game_runtime": "NOT_RUN"
+}

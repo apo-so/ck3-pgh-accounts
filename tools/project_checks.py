@@ -14,6 +14,51 @@ REQUIRED_EVIDENCE = {
 }
 
 
+def descriptor_fields(text):
+    """Read root assignments without treating line boundaries as field boundaries."""
+    pattern = re.compile(r'\s+|#[^\r\n]*|"(?:\\.|[^"\\])*"|[{}=]|[^\s{}="#]+')
+    tokens, position = [], 0
+    while position < len(text):
+        match = pattern.match(text, position)
+        if not match:
+            raise ValueError('Unterminated string or invalid descriptor token')
+        token = match.group()
+        position = match.end()
+        if not token.isspace() and not token.startswith('#'):
+            tokens.append(token)
+
+    def scalar(token):
+        if token in {'{', '}', '='}:
+            raise ValueError('Expected a scalar descriptor key/value')
+        if token.startswith('"'):
+            return re.sub(r'\\(["\\])', r'\1', token[1:-1])
+        return token
+
+    fields, index = {}, 0
+    while index < len(tokens):
+        key = scalar(tokens[index])
+        if index + 2 >= len(tokens) or tokens[index + 1] != '=':
+            raise ValueError('Expected descriptor key = value')
+        index += 2
+        if tokens[index] == '{':
+            depth = 1
+            index += 1
+            while index < len(tokens) and depth:
+                if tokens[index] == '{':
+                    depth += 1
+                elif tokens[index] == '}':
+                    depth -= 1
+                index += 1
+            if depth:
+                raise ValueError('Unclosed descriptor block')
+            value = None  # Nested tags/dependencies are not scalar metadata.
+        else:
+            value = scalar(tokens[index])
+            index += 1
+        fields.setdefault(key, []).append(value)
+    return fields
+
+
 def checked_manifest(root, relative, required, allowed):
     failures, entries = [], {}
     try:
@@ -66,21 +111,20 @@ def check_source(root):
     descriptor = root / 'pgh_accounts.mod'
     if descriptor.is_file():
         try:
-            paths = re.findall(r'^\s*path\s*=\s*"([^"\r\n]*)"\s*(?:#.*)?$', descriptor.read_text(encoding='utf-8-sig'), re.MULTILINE)
+            outside = descriptor_fields(descriptor.read_text(encoding='utf-8-sig'))
+            paths = outside.get('path', [])
             if paths != ['mod/pgh_accounts'] or not (root / 'pgh_accounts').is_dir():
                 failures.append('External descriptor must contain exactly path="mod/pgh_accounts"')
             internal = root / 'pgh_accounts/descriptor.mod'
             if internal.is_file():
-                inside = internal.read_text(encoding='utf-8-sig')
-                outside = descriptor.read_text(encoding='utf-8-sig')
+                inside = descriptor_fields(internal.read_text(encoding='utf-8-sig'))
                 for field in ['name', 'version', 'supported_version', 'remote_file_id']:
-                    pattern = r'^\s*' + field + r'\s*=\s*"([^"\r\n]*)"\s*(?:#.*)?$'
-                    original = re.findall(pattern, inside, re.MULTILINE)
-                    launcher = re.findall(pattern, outside, re.MULTILINE)
+                    original = inside.get(field, [])
+                    launcher = outside.get(field, [])
                     valid_count = len(original) in (0, 1) if field == 'remote_file_id' else len(original) == 1
-                    if launcher != original or not valid_count:
+                    if launcher != original or not valid_count or any(not isinstance(v, str) for v in original):
                         failures.append('Descriptor metadata missing, duplicated or inconsistent: ' + field)
-        except (OSError, UnicodeError) as exc:
+        except (OSError, UnicodeError, ValueError) as exc:
             failures.append('Invalid external descriptor: ' + str(exc))
     return entries, actual, failures
 

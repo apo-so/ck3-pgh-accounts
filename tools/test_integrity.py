@@ -15,6 +15,10 @@ cases = [
     ('omitted_external_descriptor', (1, 1)),
     ('wrong_descriptor_path_with_new_hash', (1, 1)),
     ('descriptor_metadata_mismatch_with_new_hash', (1, 1)),
+    ('inline_duplicate_path_with_new_hash', (1, 1)),
+    ('inline_duplicate_version_with_new_hash', (1, 1)),
+    ('descriptor_comment_and_string_decoys', (0, 0)),
+    ('descriptor_valid_root_fields_on_one_line', (0, 0)),
     ('empty_evidence', (0, 1)),
     ('removed_required_evidence', (0, 1)),
     ('duplicate_source_entry', (1, 1)),
@@ -35,12 +39,16 @@ with tempfile.TemporaryDirectory(prefix='ck3-pgh-integrity-') as temporary:
         elif name == 'omitted_external_descriptor':
             manifest['files'] = [r for r in manifest['files'] if r['path'] != 'pgh_accounts.mod']
             descriptor.write_text('path="mod/missing-folder"\n', encoding='utf-8')
-        elif name in {'wrong_descriptor_path_with_new_hash', 'descriptor_metadata_mismatch_with_new_hash'}:
+        elif name in {'wrong_descriptor_path_with_new_hash', 'descriptor_metadata_mismatch_with_new_hash', 'inline_duplicate_path_with_new_hash', 'inline_duplicate_version_with_new_hash'}:
             text = descriptor.read_text(encoding='utf-8')
             if name == 'wrong_descriptor_path_with_new_hash':
                 text = text.replace('path="mod/pgh_accounts"', 'path="mod/missing-folder"')
-            else:
+            elif name == 'descriptor_metadata_mismatch_with_new_hash':
                 text = text.replace('supported_version="1.20.*"', 'supported_version="0.0.*"')
+            elif name == 'inline_duplicate_path_with_new_hash':
+                text += '\ntags={} path="mod/nonexistent-review-fixture"\n'
+            else:
+                text += '\ntags={} supported_version="0.0.*"\n'
             descriptor.write_text(text, encoding='utf-8')
             for row in manifest['files']:
                 if row['path'] == 'pgh_accounts.mod':
@@ -54,6 +62,19 @@ with tempfile.TemporaryDirectory(prefix='ck3-pgh-integrity-') as temporary:
             manifest['files'].append(manifest['files'][0].copy())
         elif name == 'invalid_source_schema':
             manifest = []
+        elif name in {'descriptor_comment_and_string_decoys', 'descriptor_valid_root_fields_on_one_line'}:
+            for relative in ['pgh_accounts.mod', 'pgh_accounts/descriptor.mod']:
+                path = target / relative
+                text = path.read_text(encoding='utf-8')
+                if name == 'descriptor_comment_and_string_decoys':
+                    text = text.replace('"Gameplay"', '"path=decoy # supported_version=decoy"')
+                    text += '\n# path="mod/missing-folder" supported_version="0.0.*"\n'
+                else:
+                    text = ' '.join(text.splitlines()) + '\n'
+                path.write_text(text, encoding='utf-8')
+                for row in manifest['files']:
+                    if row['path'] == relative:
+                        row['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
         manifest_path.write_text(json.dumps(manifest, ensure_ascii=True), encoding='utf-8')
         evidence_path.write_text(json.dumps(evidence, ensure_ascii=True), encoding='utf-8')
         checks = []

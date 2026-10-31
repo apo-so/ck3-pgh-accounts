@@ -1,0 +1,13 @@
+{
+  "reviewed_commit": "e2987c920fdb0cfcbe2ee03e0ef33569b6eeada6",
+  "original_report_sha256": "ab7edf7cd9700f1d23737ef10ab1b75f1af4657aa2275585a3b408d5cea9cd14",
+  "sanitized_report_sha256": "e0322a32b36251f92d7b964c5c6d869b22f7b1c5f55097875b5c7e6adf805432",
+  "input": "GitHub only, fresh HTTPS ZIP",
+  "private_project_read": false,
+  "F1": "OPEN_R1_INLINE_DUPLICATE_ASSIGNMENT",
+  "F2": "CLOSED",
+  "F3": "CLOSED",
+  "F4": "BOUNDARY_DOCUMENTATION_CLOSED",
+  "protected_files_byte_equal": 71,
+  "game_runtime": "NOT_RUN"
+}

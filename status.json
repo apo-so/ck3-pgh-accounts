@@ -1,6 +1,6 @@
 {
   "project": "亳伯奇难题（更理想的宫帐政体）",
-  "updated_at": "2026-10-31T18:54:06.904243+08:00",
+  "updated_at": "2026-10-31T19:04:40.451502+08:00",
   "source_snapshot": "R72 complete source + R76 localization overlay",
   "source_base_commit": "63a5e1c5b5d599bae245e446abafd70221957428",
   "mod_files": 69,
@@ -34,9 +34,12 @@
     "chat_history_inherited": false,
     "initial_commit": "2adc0857ea961c89f091a95f996a57ed2b74c3ae",
     "source_handoff": "PASS_INITIAL_REVIEW",
-    "integrity_gate_gaps": "FIXED_LOCALLY_PENDING_REMOTE_RECHECK",
+    "integrity_gate_gaps": "ORIGINAL_F1_F2_FIXED_R1_LOCAL_FIX_PENDING_SECOND_RECHECK",
     "findings": "docs/reviews/README.md",
     "historical_full_source_binding": "PARTIAL",
-    "game_runtime": "NOT_RUN"
+    "game_runtime": "NOT_RUN",
+    "first_recheck_commit": "e2987c920fdb0cfcbe2ee03e0ef33569b6eeada6",
+    "first_recheck_report": "docs/reviews/RECHECK_e2987c9.md",
+    "regression_cases": 13
   }
 }

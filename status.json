@@ -1,6 +1,6 @@
 {
   "project": "亳伯奇难题（更理想的宫帐政体）",
-  "updated_at": "2026-10-31T19:04:40.451502+08:00",
+  "updated_at": "2026-10-31T19:10:52.850057+08:00",
   "source_snapshot": "R72 complete source + R76 localization overlay",
   "source_base_commit": "63a5e1c5b5d599bae245e446abafd70221957428",
   "mod_files": 69,
@@ -33,13 +33,20 @@
     "source": "GitHub only",
     "chat_history_inherited": false,
     "initial_commit": "2adc0857ea961c89f091a95f996a57ed2b74c3ae",
-    "source_handoff": "PASS_INITIAL_REVIEW",
-    "integrity_gate_gaps": "ORIGINAL_F1_F2_FIXED_R1_LOCAL_FIX_PENDING_SECOND_RECHECK",
+    "source_handoff": "PASS",
+    "integrity_gate_gaps": "CLOSED",
     "findings": "docs/reviews/README.md",
     "historical_full_source_binding": "PARTIAL",
     "game_runtime": "NOT_RUN",
     "first_recheck_commit": "e2987c920fdb0cfcbe2ee03e0ef33569b6eeada6",
     "first_recheck_report": "docs/reviews/RECHECK_e2987c9.md",
-    "regression_cases": 13
+    "regression_cases": 13,
+    "final_rechecked_commit": "37057f4aea4608ad2f405c69f715033bb44d8bed",
+    "final_report": "docs/reviews/FINAL_RECHECK_37057f4.md",
+    "final_report_original_sha256": "5f6998aa5037c8393842063bb15b162e790d88a6f05d9ed6ec5cce60a35cb714",
+    "integrity_gates": "PASS",
+    "repository_regression_cases": 13,
+    "protected_files_byte_equal": 71,
+    "publication_note": "Report-only archival commit; reviewed source and tools unchanged"
   }
 }

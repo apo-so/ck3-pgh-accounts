@@ -1,0 +1,18 @@
+{
+  "reviewed_commit": "37057f4aea4608ad2f405c69f715033bb44d8bed",
+  "original_report_sha256": "5f6998aa5037c8393842063bb15b162e790d88a6f05d9ed6ec5cce60a35cb714",
+  "sanitized_report_sha256": "8e92c1db517ff65258bc91ee17ca0985dd3789c9dc8284eff7ee27a32a1f0fc9",
+  "agent": "github_only_handoff_review",
+  "chat_history_inherited": false,
+  "project_input": "GitHub only; independent fresh download",
+  "source_handoff": "PASS",
+  "integrity_gates": "PASS",
+  "F1": "CLOSED_INCLUDING_R1_INLINE_DUPLICATES",
+  "F2": "CLOSED",
+  "F3": "CLOSED",
+  "F4": "DOCUMENTATION_CLOSED_HISTORICAL_BINDING_BOUNDARY",
+  "repository_regressions": 13,
+  "protected_files_byte_equal": 71,
+  "historical_full_source_binding": "PARTIAL",
+  "game_runtime": "NOT_RUN"
+}

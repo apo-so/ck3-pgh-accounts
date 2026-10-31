@@ -1,0 +1,39 @@
+{
+  "time": "2026-10-16T00:44:19.811109+08:00",
+  "version": "1.20.1.1",
+  "ordinary": {
+    "status": "PASS",
+    "pre": "PRE",
+    "post": "GOLD_POST",
+    "gold_before": "579",
+    "gold_after": "498",
+    "gold_paid": "81",
+    "herd_paid_by_domicile": {
+      "872": "0.00000",
+      "1179": "0.00000"
+    },
+    "title_treasury_unchanged": true,
+    "primary_title39_treasury": "1200",
+    "new_personal_regiment": "16795341",
+    "initial_soldiers": 5,
+    "new_regiment_raw": "\t\t16795341={\n\t\t\ttype=armored_footmen\n\t\t\tmax=100\n\t\t\towner=34437\n\t\t\tchunks={\n\t\t\t\t{\n\t\t\t\t\tmax=100\n\t\t\t\t\tcurrent=5\n\t\t\t\t}\n\t\t\t}\n\t\t}\n"
+  },
+  "horde": {
+    "status": "PASS",
+    "pre": "HORDE_PRE",
+    "post": "HORDE_POST",
+    "gold_before": "579",
+    "gold_after": "534",
+    "gold_paid": "45",
+    "herd_paid_by_domicile": {
+      "872": "0.00000",
+      "1179": "100.00000"
+    },
+    "title_treasury_unchanged": true,
+    "primary_title39_treasury": "1200",
+    "new_personal_regiment": "16793373",
+    "initial_soldiers": 100,
+    "new_regiment_raw": "\t\t16793373={\n\t\t\ttype=armored_footmen\n\t\t\tsize=100\n\t\t\towner=34437\n\t\t}\n"
+  },
+  "scope": "one real native creation in each mode; no all-types or precision claim"
+}

@@ -1,0 +1,31 @@
+{
+  "status": "STATIC_PASS",
+  "files": [
+    {
+      "relative_path": "localization/simp_chinese/nhe72_palace_estate_l_simp_chinese.yml",
+      "target": "pgh_accounts/localization/simp_chinese/nhe72_palace_estate_l_simp_chinese.yml",
+      "before_sha256": "f43623555356695408ef91bd83b72a3165038bb718312e6234f209e6aacf35cd",
+      "candidate": "pgh_accounts/localization/simp_chinese/nhe72_palace_estate_l_simp_chinese.yml",
+      "candidate_sha256": "4d1a10440dc916ae139a10df6113560dc83ba554d15420b0728a18b9343bad24",
+      "backup": "[LOCAL_ONLY_PATH_REMOVED]"
+    },
+    {
+      "relative_path": "localization/english/nhe72_palace_estate_l_english.yml",
+      "target": "pgh_accounts/localization/english/nhe72_palace_estate_l_english.yml",
+      "before_sha256": "fc73337d2d1ed331bbbe1ab33e9453b1571e2134e4ea9931a136181b36c5d30d",
+      "candidate": "pgh_accounts/localization/english/nhe72_palace_estate_l_english.yml",
+      "candidate_sha256": "dfe8d068d3326590a2654e09bc95f63782bbfb911052a1aac02fcc76ff20716a",
+      "backup": "[LOCAL_ONLY_PATH_REMOVED]"
+    }
+  ],
+  "checks": [
+    "UTF-8 BOM preserved",
+    "language header preserved",
+    "one alias per language",
+    "reference target exists",
+    "exactly one line added per file",
+    "no existing keys changed"
+  ],
+  "runtime": "NOT_RUN",
+  "render": "NOT_RUN"
+}

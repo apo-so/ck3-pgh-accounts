@@ -1,0 +1,106 @@
+{
+  "status": "PASS_NEW_NF_ENGINE_CREATED_PALACE_DOMICILE",
+  "at": "2026-10-20T18:45:57.321428+08:00",
+  "target": "32396",
+  "before": "feudal_government; no domicile",
+  "intermediate": "steppe_admin_government; no domicile/NF",
+  "new_title": {
+    "id": "18506",
+    "key": "x_nf_825",
+    "holder": "32396",
+    "capital": "204",
+    "serialized_dynamic_tier": "county"
+  },
+  "new_domicile": {
+    "owner_title": "18506",
+    "title_domicile_bidirectional_match": true,
+    "type": "nhe72_palace_estate",
+    "province": "1527",
+    "building_keys": [
+      "east_asian_estate_main_01"
+    ],
+    "slots": [
+      {
+        "slot_index": "0",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      },
+      {
+        "slot_index": "1",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      },
+      {
+        "slot_index": "2",
+        "slot_type": "main",
+        "building": "east_asian_estate_main_01",
+        "parent_slot_index": null,
+        "internal_slots": [
+          {
+            "slot_index": "0",
+            "slot_type": null,
+            "building": null,
+            "parent_slot_index": "2",
+            "internal_slots": []
+          },
+          {
+            "slot_index": "1",
+            "slot_type": null,
+            "building": null,
+            "parent_slot_index": "2",
+            "internal_slots": []
+          },
+          {
+            "slot_index": "2",
+            "slot_type": null,
+            "building": null,
+            "parent_slot_index": "2",
+            "internal_slots": []
+          }
+        ]
+      },
+      {
+        "slot_index": "3",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      },
+      {
+        "slot_index": "4",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      },
+      {
+        "slot_index": "5",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      },
+      {
+        "slot_index": "6",
+        "slot_type": "external",
+        "building": null,
+        "parent_slot_index": null,
+        "internal_slots": []
+      }
+    ],
+    "parent_slot_assertion": "EXPLICIT_NATIVE_INTERNAL_SLOTS_NESTING_EXTRACTED; actual clicked UI mapping still required",
+    "herd": "2911.23383",
+    "provisions": "0"
+  },
+  "fresh_global_title_id": true,
+  "existing_target_titles_preserved": true,
+  "player_unchanged": true,
+  "explicit_domicile_type_in_creation_command": false,
+  "restoration": "PASS_PRE_LOADED_NATIVE_READBACK_AND_GUI_RESTORED",
+  "new_title_native_noble_family_flag": true,
+  "all_existing_global_title_ids_preserved": true
+}

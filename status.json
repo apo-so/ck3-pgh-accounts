@@ -1,0 +1,31 @@
+{
+  "project": "亳伯奇难题（更理想的宫帐政体）",
+  "updated_at": "2026-10-31T18:40:16.566414+08:00",
+  "source_snapshot": "R72 complete source + R76 localization overlay",
+  "source_base_commit": "63a5e1c5b5d599bae245e446abafd70221957428",
+  "mod_files": 69,
+  "entry": "接手入口.md",
+  "handoff": "docs/HANDOFF.md",
+  "next_steps": "docs/NEXT_STEPS.md",
+  "source_map": "docs/SOURCE_MAP.md",
+  "verification_command": "python tools/verify_handoff.py",
+  "historical_evidence_manifest": "docs/evidence/manifest.json",
+  "single_writer_required": true,
+  "ongoing_background_operations": [],
+  "pending_feedback": [
+    "current reporter error.log or error excerpt",
+    "game version, mod source/version, active DLC and other mods, new/old save"
+  ],
+  "next_action": "Verify repository integrity, identify reported artifact/version, then attribute actual error lines to current code before fixing.",
+  "source_complete": true,
+  "historical_validation": {
+    "R74_new_family_path": "PASS_HISTORICAL",
+    "R59_two_payment_samples": "PASS_HISTORICAL",
+    "R76_static_deployment": "PASS_HISTORICAL",
+    "R76_render": "NOT_RUN"
+  },
+  "new_machine_deployment": "NOT_RUN",
+  "new_machine_game_runtime": "NOT_RUN",
+  "historical_full_reproduction": "NOT_AVAILABLE_FROM_REPO_ALONE",
+  "source_changes_this_handoff": false
+}

@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-20T18:48:05.553337+08:00",
+  "status": "RESTORED_PRE_NATIVE_READBACK_PASS",
+  "checks": {
+    "date": true,
+    "global_title_id_set": true,
+    "test_title_absent": true,
+    "32396_government": true,
+    "32396_gold": true,
+    "32396_held_titles": true,
+    "32396_domiciles": true,
+    "34437_government": true,
+    "34437_gold": true,
+    "34437_held_titles": true,
+    "34437_domiciles": true
+  },
+  "pre_sha256": "321c6c1aae41421dd136d0a80f929daec44b056753ba6dae638fa935f166ec0c",
+  "restored_sha256": "535c9d6e9c82e4d4d27946d2713f0a5aa24d9df6abaee7a0e289071c3bb12701",
+  "gui_restored": {
+    "at": "2026-10-20T18:47:44.522991+08:00",
+    "target": "pgh_accounts/gui/window_menatarms_type_view.gui",
+    "before": "0e91a2df5c1235706d3c07f364e1f34d8211a5fe9e8f004c2239c04c839ddff6",
+    "candidate": "2f7e0aec1a9801338668f0fe9fafda70b628a05172b3fbc4ce771fa778a8c392",
+    "safe_rerun": true,
+    "status": "RESTORED_ORIGINAL_BYTES"
+  },
+  "native_ui_removal_observed": true
+}

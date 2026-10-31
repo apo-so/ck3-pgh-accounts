@@ -1,0 +1,53 @@
+{
+  "kind": "sanitized_historical_results",
+  "files": [
+    {
+      "path": "docs/evidence/R72-audit.json",
+      "sha256": "32713d6e17c24a0e88960d2ac31ffa18010e01363010ab22a87510e831db5d00",
+      "historical_source": "R72_PALACE_ESTATE_ISOLATION_TRIAL_20261020/evidence/independent-audit.json",
+      "original_sha256": "94ef97d7a0da083a859eab35d003a110a0da6f461ba15d0eb9e3cff99db3636a",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "docs/evidence/R74-creation.json",
+      "sha256": "4dfaefd40aefe67e06ad6cf494fda87997232b3933006326a7bf57d03bb367b0",
+      "historical_source": "R74_NEW_NOBLE_FAMILY_PALACE_DOMICILE_20261020/runtime/CREATION-RESULT.json",
+      "original_sha256": "3a1691e605339a02eb4cfcb745ee422f80a063b2b2dad358ce7c06d2cc691209",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "docs/evidence/R74-restoration.json",
+      "sha256": "ae36103f599521107247845201ea000325ae0aaffebfdd73dcb1a423648ac186",
+      "historical_source": "R74_NEW_NOBLE_FAMILY_PALACE_DOMICILE_20261020/runtime/RESTORATION.json",
+      "original_sha256": "bf259b2a6f049f2827f53d9c8c88573d680277dd8402693d43fb0b6b7ebe8267",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "docs/evidence/R59-payment.json",
+      "sha256": "0316d8da9bde8a2fd90b5aa5aa2caef5ea892ee06bf7bf7343bbff3e10ab3d2a",
+      "historical_source": "R59_NATIVE_LIST_FINAL_20261015/evidence/PAYMENT_ACCEPTANCE.json",
+      "original_sha256": "c7539146fd2127144587948138dfa4eb8becd50a9c24022bb74946d88ea7e7b5",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "docs/evidence/R76-static.json",
+      "sha256": "ef325fb6e62f336fa4bdc8e83668a2420a9af7227b7ccd8c0b71b127f4b2737e",
+      "historical_source": "R76_PALACE_LOCALIZATION_20261030/STATIC.json",
+      "original_sha256": "470a2a756acd159f39eedd76a71036f8318602f2f117dca9c843e33c3aec204c",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    },
+    {
+      "path": "docs/evidence/R76-deployment.json",
+      "sha256": "bf3eab1b261dbb12548482961ccdb450f49a35a7feaf4334cf631546cb3a36c3",
+      "historical_source": "R76_PALACE_LOCALIZATION_20261030/deployments/DEPLOY-001/receipt.json",
+      "original_sha256": "f7d45aedb5a0e5e5a3406e634ecc61a910ee5e3fd703dc649d031efa0979b0a6",
+      "transform": "Only machine-local path strings removed or mapped to repo-relative paths; observations retained",
+      "verification": "HISTORICAL_RESULT_NOT_RERUN"
+    }
+  ]
+}

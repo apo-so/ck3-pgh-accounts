@@ -1,0 +1,102 @@
+{
+  "status": "INDEPENDENT_AUDIT_PASS",
+  "at": "2026-10-20T15:49:15+08:00",
+  "plan": "[LOCAL_ONLY_PATH_REMOVED]",
+  "candidate": "[LOCAL_ONLY_PATH_REMOVED]",
+  "install": "[LOCAL_ONLY_PATH_REMOVED]",
+  "receipt": "[LOCAL_ONLY_PATH_REMOVED]",
+  "checks": {
+    "install_tree": {
+      "baseline_files": 64,
+      "install_files": 69,
+      "changed_files": 17,
+      "new_files": 5,
+      "all_changed_files_at_receipt_after": true,
+      "install_drift_outside_whitelist": []
+    },
+    "candidate_tree": {
+      "all_changed_files_at_receipt_after": true,
+      "non_whitelist_drift": []
+    },
+    "before_payload": {
+      "files": 12,
+      "hash_mismatches": []
+    },
+    "transforms": {
+      "exact_expected": 17,
+      "mismatches": []
+    },
+    "clone": {
+      "reverts_exactly_to_pre_edit_normal_type_after_removing_herd": true,
+      "herd_lines": 1
+    },
+    "normal_type": {
+      "herd_lines": 0,
+      "only_change_removed_herd_line": true
+    },
+    "government": {
+      "domicile_type": "nhe72_palace_estate",
+      "only_change_type_name": true
+    },
+    "macro": {
+      "IsNomad_palace_branch": true,
+      "real_nomad_yurt_branch_preserved": true,
+      "only_change_type_name": true
+    },
+    "building_whitelist": {
+      "file": "common/domiciles/buildings/00_chinese_estate_buildings.txt",
+      "lists_before": 545,
+      "lists_after": 545,
+      "pure_additive": true,
+      "other_building_files_with_east_asian_allowed_lists": 0
+    },
+    "type_checks": {
+      "replacement_occurrences": 38,
+      "files": 8,
+      "old_exact_remaining_in_mod": 0,
+      "same_scope_contract": true
+    },
+    "native_overrides": {
+      "domicile_is_estate_trigger": "vanilla 1.20.1.1 block plus one palace type test",
+      "set_up_domicile_estate_effect": "vanilla 1.20.1.1 block plus one type-test replacement",
+      "other_native_creation_rewrites": false
+    },
+    "syntax": {
+      "brace_balance_bad": [],
+      "loc_quote_pairs_ok": true,
+      "bom_preserved_on_edits": true
+    },
+    "protected": {
+      "gui_unchanged": true,
+      "r70_window_military_unchanged": true,
+      "r67_window_menatarms_type_view_unchanged": true,
+      "history_files_changed": 0,
+      "save_files_changed": 0
+    }
+  },
+  "scope_notes": {
+    "vanilla_direct_refs": {
+      "conversion_hardcodes": [
+        "common/scripted_effects/00_administrative_effects.txt:163 (celestial; normal estate is correct)",
+        "common/scripted_effects/00_administrative_effects.txt:183 (steppe-admin conversion; would still produce normal estate, outside R72 new-game scope)",
+        "common/scripted_effects/00_administrative_effects.txt:209 (meritocratic; normal estate is correct)",
+        "common/scripted_effects/10_dlc_tgp_dynastic_cycle_scripted_effects.txt:126 (celestial; normal estate is correct)",
+        "common/decisions/dlc_decisions/tgp/tgp_steppe_decisions.txt:497 (meritocratic; normal estate is correct)"
+      ],
+      "cosmetic_or_inactive": [
+        "common/event_backgrounds/01_event_backgrounds.txt:9877,9881,9893,9896 (event art fallback only)",
+        "common/flavorization/10_tgp_korea_flavorization.txt:198,210 and 11_tgp_china_flavorization.txt:676,689 (domicile-holder flavor only)",
+        "common/on_action/game_start.txt:1409 (inside has_tgp_dlc_trigger = no cleanup)"
+      ]
+    },
+    "old_save_migration": "NOT IMPLEMENTED",
+    "runtime": "NOT RUN"
+  },
+  "process_precondition": {
+    "pid": 19824,
+    "started": "2026-10-20T14:48:11+08:00",
+    "deployed": "2026-10-20T15:39:46+08:00",
+    "loaded_r72": false,
+    "action": "Fully exit and restart CK3 before any new-game test; a new game inside the current process still uses pre-R72 data."
+  }
+}
